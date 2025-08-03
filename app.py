@@ -28,6 +28,16 @@ def generate_map():
     map_data = map_gen.generate_map()
     return jsonify(map_data)
 
+@app.route('/get_starting_mechs')
+def get_starting_mechs():
+    """Get available starting mechs for new players."""
+    starting_mechs = game_engine.get_starting_mechs()
+    
+    return jsonify({
+        'success': True,
+        'starting_mechs': starting_mechs
+    })
+
 @app.route('/create_character', methods=['POST'])
 def create_character():
     """Create a new player character."""
@@ -39,6 +49,7 @@ def create_character():
     guts = int(data.get('guts', 8))
     tactics = int(data.get('tactics', 8))
     skills = data.get('skills', {})
+    starting_mech = data.get('starting_mech')  # New field for starting mech selection
     
     # Validate input
     if not name or len(name) < 2:
@@ -52,6 +63,10 @@ def create_character():
     points_spent = 32 - total_points  # Started with 32 total (8 each), spent points reduce total
     if points_spent != 10:
         return jsonify({'success': False, 'message': 'You must spend exactly 10 points to improve your skills.'})
+    
+    # Validate starting mech selection
+    if not starting_mech:
+        return jsonify({'success': False, 'message': 'Please select a starting mech.'})
     
     # Check if name already exists
     existing_player = Player.query.filter_by(name=name).first()
@@ -74,6 +89,18 @@ def create_character():
         player.turn_number = 1
         
         db.session.add(player)
+        db.session.flush()  # Get the player ID
+        
+        # Assign starting mech
+        mech_result = game_engine.assign_starting_mech(player, starting_mech)
+        if not mech_result['success']:
+            db.session.rollback()
+            return jsonify({'success': False, 'message': mech_result['message']})
+        
+        # Refresh movement points after mech assignment
+        player.movement_points_remaining = player.get_movement_points()
+        
+        # Commit the session
         db.session.commit()
         
         # Store player ID in session
@@ -81,7 +108,7 @@ def create_character():
         
         return jsonify({
             'success': True,
-            'message': f'Character {name} created successfully! Purchase a mech to start moving.',
+            'message': f'Character {name} created successfully with {starting_mech}! You can now move on the map.',
             'player': player.to_dict()
         })
     except Exception as e:
@@ -182,6 +209,9 @@ def move_player():
             if random.random() < encounter_chance:
                 encounter = game_engine.generate_encounter(terrain_type)
         
+        # Clear declined missions when moving
+        player.clear_declined_missions()
+        
         db.session.commit()
         
         terrain_name = terrain_type.replace('_', ' ').title()
@@ -216,6 +246,10 @@ def end_turn():
     # Start new turn
     player.start_turn()
     player.last_active = datetime.utcnow()
+    
+    # Clear declined missions when ending turn
+    player.clear_declined_missions()
+    
     db.session.commit()
     
     return jsonify({
@@ -474,6 +508,40 @@ def start_mission():
             'message': result['message'],
             'rewards': result.get('rewards', {}),
             'leveled_up': result.get('leveled_up', False),
+            'player': player.to_dict()
+        })
+    else:
+        return jsonify({
+            'success': False,
+            'message': result['message']
+        })
+
+@app.route('/decline_mission', methods=['POST'])
+def decline_mission():
+    """Decline a mission."""
+    player_id = session.get('player_id')
+    if not player_id:
+        return jsonify({'success': False, 'message': 'No character loaded.'})
+    
+    player = Player.query.get(player_id)
+    if not player:
+        return jsonify({'success': False, 'message': 'Character not found.'})
+    
+    data = request.get_json()
+    mission_id = data.get('mission_id')
+    
+    if not mission_id:
+        return jsonify({'success': False, 'message': 'No mission ID provided.'})
+    
+    # Decline the mission
+    result = game_engine.decline_mission(player, mission_id)
+    
+    if result['success']:
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': result['message'],
             'player': player.to_dict()
         })
     else:

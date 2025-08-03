@@ -9,6 +9,7 @@ class GameEngine:
     def __init__(self):
         self.encounters = self._load_encounters()
         self.missions = self._load_missions()
+        self.starting_mechs = self._load_starting_mechs()
     
     def _load_encounters(self):
         """Load encounter data."""
@@ -17,8 +18,8 @@ class GameEngine:
                 'name': 'Pirate Patrol',
                 'description': 'A small pirate patrol blocks your path.',
                 'difficulty': 'easy',
-                'reward_credits': (100, 300),
-                'reward_experience': (50, 150),
+                'reward_credits': (1000, 3000),
+                'reward_experience': (200, 500),
                 'success_chance': 0.7,
                 'terrain_modifier': {
                     'forest': 0.1,
@@ -30,8 +31,8 @@ class GameEngine:
                 'name': 'Salvage Opportunity',
                 'description': 'You discover abandoned military equipment.',
                 'difficulty': 'easy',
-                'reward_credits': (200, 500),
-                'reward_experience': (25, 75),
+                'reward_credits': (2000, 5000),
+                'reward_experience': (50, 150),
                 'success_chance': 0.8,
                 'terrain_modifier': {
                     'hills': 0.1,
@@ -42,8 +43,8 @@ class GameEngine:
                 'name': 'Mercenary Contract',
                 'description': 'A local faction offers you a contract.',
                 'difficulty': 'medium',
-                'reward_credits': (500, 1000),
-                'reward_experience': (100, 300),
+                'reward_credits': (5000, 10000),
+                'reward_experience': (1000, 3000),
                 'success_chance': 0.6,
                 'terrain_modifier': {
                     'plains': 0.1,
@@ -54,8 +55,8 @@ class GameEngine:
                 'name': 'Bandit Ambush',
                 'description': 'Bandits attempt to ambush you!',
                 'difficulty': 'hard',
-                'reward_credits': (300, 800),
-                'reward_experience': (150, 400),
+                'reward_credits': (3000, 8000),
+                'reward_experience': (300, 800),
                 'success_chance': 0.5,
                 'terrain_modifier': {
                     'forest': -0.2,
@@ -67,8 +68,8 @@ class GameEngine:
                 'name': 'Mech Duel Challenge',
                 'description': 'Another MechWarrior challenges you to single combat.',
                 'difficulty': 'hard',
-                'reward_credits': (800, 1500),
-                'reward_experience': (200, 500),
+                'reward_credits': (8000, 15000),
+                'reward_experience': (2000, 5000),
                 'success_chance': 0.4,
                 'terrain_modifier': {
                     'plains': 0.1,
@@ -92,7 +93,7 @@ class GameEngine:
                     'base_reward_credits': 1500,
                     'base_reward_experience': 300,
                     'level_scaling': {
-                        'credits_per_level': 500,
+                        'credits_per_level': 5000,
                         'experience_per_level': 100
                     },
                     'requirements': {
@@ -105,6 +106,89 @@ class GameEngine:
             print(f"Error parsing missions.json: {e}")
             return {}
     
+    def _load_starting_mechs(self):
+        """Load starting mech options for new players."""
+        try:
+            with open('data/mechs.json', 'r') as f:
+                mechs_data = json.load(f)
+            
+            # Filter for the three starting mechs: Locust, Wasp, Stinger
+            starting_mech_names = ['Locust', 'Wasp', 'Stinger']
+            starting_mechs = []
+            
+            for mech in mechs_data['mechs']:
+                if mech['name'] in starting_mech_names:
+                    # Use value from Excel if available, otherwise calculate price
+                    if 'value' in mech:
+                        mech['price'] = mech['value']
+                    else:
+                        mech['price'] = mech['tonnage'] * 50 + mech['battle_value'] * 2
+                    
+                    starting_mechs.append(mech)
+            
+            return starting_mechs
+        except FileNotFoundError:
+            print("Warning: mechs.json not found, using default starting mechs")
+            return []
+        except json.JSONDecodeError as e:
+            print(f"Error parsing mechs.json: {e}")
+            return []
+    
+    def get_starting_mechs(self):
+        """Get available starting mechs for new players."""
+        return self.starting_mechs
+    
+    def assign_starting_mech(self, player, mech_name):
+        """Assign a starting mech to a new player."""
+        # Find the selected mech
+        selected_mech = None
+        for mech in self.starting_mechs:
+            if mech['name'] == mech_name:
+                selected_mech = mech
+                break
+        
+        if not selected_mech:
+            return {'success': False, 'message': 'Starting mech not found.'}
+        
+        try:
+            # Create or find mech template
+            template = MechTemplate.query.filter_by(name=selected_mech['name'], model=selected_mech['model']).first()
+            if not template:
+                template = MechTemplate(
+                    name=selected_mech['name'],
+                    model=selected_mech['model'],
+                    tonnage=selected_mech['tonnage'],
+                    battle_value=selected_mech['battle_value'],
+                    price=selected_mech['price']
+                )
+                template.set_specs(selected_mech)
+                db.session.add(template)
+                db.session.flush()  # Get the ID
+            
+            # Create the player mech
+            player_mech = PlayerMech(
+                player_id=player.id,
+                template_id=template.id
+            )
+            db.session.add(player_mech)
+            db.session.flush()  # Get the mech ID
+            
+            # Set as active mech and refresh movement points
+            player.active_mech_id = player_mech.id
+            player.movement_points_remaining = player.get_movement_points()
+            
+            db.session.commit()
+            
+            return {
+                'success': True,
+                'message': f'Starting mech {selected_mech["name"]} assigned successfully!',
+                'mech': player_mech.to_dict()
+            }
+            
+        except Exception as e:
+            db.session.rollback()
+            return {'success': False, 'message': f'Error assigning starting mech: {str(e)}'}
+
     def calculate_success_chance(self, player, encounter_type, terrain_type):
         """Calculate success chance for an encounter."""
         encounter = self.encounters.get(encounter_type)
@@ -243,8 +327,13 @@ class GameEngine:
     def get_available_missions(self, player):
         """Get missions available to the player."""
         available = []
+        declined_missions = player.get_declined_missions()
         
         for mission_id, mission in self.missions.items():
+            # Skip if mission has been declined
+            if mission_id in declined_missions:
+                continue
+                
             requirements = mission.get('requirements', {})
             
             # Check level requirement
@@ -267,6 +356,14 @@ class GameEngine:
             available.append(mission_copy)
         
         return available
+    
+    def decline_mission(self, player, mission_id):
+        """Decline a mission (add it to declined list)."""
+        if mission_id not in self.missions:
+            return {'success': False, 'message': 'Mission not found.'}
+        
+        player.add_declined_mission(mission_id)
+        return {'success': True, 'message': f'Mission "{self.missions[mission_id]["name"]}" declined.'}
     
     def start_mission(self, player, mission_id):
         """Start a mission for the player."""

@@ -1,6 +1,7 @@
 import random
 import json
 from datetime import datetime
+from models import db, MechTemplate, PlayerMech
 
 class BattleTechGame:
     """Simplified BattleTech game logic."""
@@ -29,6 +30,82 @@ class BattleTechGame:
                 'success_chance': 0.6
             }
         }
+        self.starting_mechs = self._load_starting_mechs()
+    
+    def _load_starting_mechs(self):
+        """Load starting mechs from mechs.json."""
+        try:
+            with open('data/mechs.json', 'r') as f:
+                data = json.load(f)
+            
+            # Handle the "mechs" wrapper array
+            all_mechs = data.get('mechs', [])
+            
+            # Filter for starting mechs: Locust, Wasp, Stinger
+            starting_mech_names = ['Locust', 'Wasp', 'Stinger']
+            starting_mechs = []
+            
+            for mech in all_mechs:
+                if mech['name'] in starting_mech_names:
+                    # Calculate price if not present
+                    if 'price' not in mech:
+                        base_price = mech.get('tonnage', 20) * 1000
+                        mech['price'] = base_price
+                    starting_mechs.append(mech)
+            
+            return starting_mechs
+        except Exception as e:
+            print(f"Error loading starting mechs: {e}")
+            return []
+    
+    def get_starting_mechs(self):
+        """Get available starting mechs."""
+        return self.starting_mechs
+    
+    def assign_starting_mech(self, player, mech_name):
+        """Assign a starting mech to a player."""
+        try:
+            # Find the mech template
+            mech_template = None
+            for mech in self.starting_mechs:
+                if mech['name'] == mech_name:
+                    mech_template = mech
+                    break
+            
+            if not mech_template:
+                return {'success': False, 'message': f'Starting mech "{mech_name}" not found.'}
+            
+            # Check if MechTemplate exists, create if not
+            template = MechTemplate.query.filter_by(name=mech_name).first()
+            if not template:
+                template = MechTemplate(
+                    name=mech_name,
+                    model=mech_template['model'],
+                    tonnage=mech_template['tonnage'],
+                    battle_value=mech_template.get('battle_value', 0),
+                    price=mech_template.get('price', mech_template['tonnage'] * 1000),
+                    specs=json.dumps(mech_template)
+                )
+                db.session.add(template)
+                db.session.flush()
+            
+            # Create PlayerMech instance
+            player_mech = PlayerMech(
+                player_id=player.id,
+                template_id=template.id,
+                custom_name=f"{player.name}'s {mech_name}"
+            )
+            
+            db.session.add(player_mech)
+            db.session.flush()
+            
+            # Set as active mech
+            player.active_mech_id = player_mech.id
+            
+            return {'success': True, 'message': f'Successfully assigned {mech_name} to {player.name}.'}
+            
+        except Exception as e:
+            return {'success': False, 'message': f'Error assigning starting mech: {str(e)}'}
     
     def calculate_success_chance(self, player, encounter_type):
         """Calculate success chance for an encounter."""

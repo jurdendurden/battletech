@@ -5,8 +5,10 @@ A web-based graphical MUD (Multi-User Dungeon) based on the BattleTech universe.
 ## Features
 
 - **Character Creation**: Create MechWarrior characters with Gunnery and Piloting skills
+- **Starting Mech Selection**: Choose from three iconic light mechs (Locust, Wasp, Stinger) when creating a new character
 - **Hex Map Exploration**: Navigate procedurally generated terrain with different biomes
 - **Encounter System**: Face pirates, salvage opportunities, and mercenary contracts
+- **Mission System**: Accept or decline missions with rewards and risks
 - **Mech Shop**: Purchase iconic BattleMechs from Technical Readout 3025
 - **Credit Economy**: Earn credits through successful encounters and missions
 - **Real-time Interface**: Interactive map with text output window
@@ -36,12 +38,19 @@ python app.py
 1. Enter a character name
 2. Set your Gunnery skill (0 = best, 8 = worst)
 3. Set your Piloting skill (0 = best, 8 = worst)
-4. Click "Create Character" or "Load Character" for existing characters
+4. Set your Guts skill (0 = best, 8 = worst)
+5. Set your Tactics skill (0 = best, 8 = worst)
+6. Choose your starting mech from three options:
+   - **Locust LCT-1V**: Fast 20-ton scout with machine guns and medium laser
+   - **Wasp WSP-1A**: Jump-capable 20-ton light mech with medium laser
+   - **Stinger STG-3R**: Versatile 20-ton light mech with medium laser and SRM-2
+7. Click "Create Character" or "Load Character" for existing characters
 
 ### Gameplay
 - **Movement**: Click on hexes on the map to move your character
 - **Encounters**: Random encounters occur based on terrain type
 - **Combat**: Choose to "Engage" or "Flee" when encounters appear
+- **Missions**: Accept or decline missions from the mission board
 - **Shopping**: Use the "Mech Shop" to purchase BattleMechs with earned credits
 - **Progression**: Gain experience and credits to improve your character
 
@@ -65,6 +74,14 @@ python app.py
 - **Salvage Opportunity**: Find abandoned equipment
 - **Mercenary Contract**: Higher-paying missions
 
+#### Missions
+- **Escort Mission**: Escort convoys through dangerous territory
+- **Reconnaissance Mission**: Scout enemy positions and report back
+- **Assault Mission**: Lead assaults on enemy strongholds
+- **Patrol Mission**: Regular patrol duties with moderate rewards
+- **Decline Missions**: Declined missions disappear until you move or end your turn
+- **Mission Rewards**: Credits and experience based on difficulty and player level
+
 #### Economy
 - Start with 1,000 credits
 - Earn credits through successful encounters
@@ -75,20 +92,17 @@ python app.py
 
 The game includes 10 iconic BattleMechs from Technical Readout 3025:
 
-### Light Mechs (20-35 tons)
+### Starting Mechs (Available for New Characters)
 - **Locust LCT-1V** (20t): Fast scout with machine guns and medium laser
 - **Wasp WSP-1A** (20t): Jump-capable light mech with medium laser
+- **Stinger STG-3R** (20t): Versatile light mech with medium laser and SRM-2
+
+### Additional BattleMechs (Available in Mech Shop)
 - **Spider SDR-5V** (30t): Highly mobile with dual medium lasers
 - **Jenner JR7-D** (35t): Kurita light striker with SRM-4 and lasers
-
-### Medium Mechs (40-55 tons)
 - **Phoenix Hawk PXH-1** (45t): Versatile jump-capable mech
 - **Trebuchet TBT-5N** (50t): Long-range missile support
-
-### Heavy Mechs (60-75 tons)
 - **Warhammer WHM-6R** (70t): Classic heavy with dual PPCs
-
-### Assault Mechs (80-100 tons)
 - **Awesome AWS-8Q** (80t): PPC boat with triple particle cannons
 - **Battlemaster BLR-1G** (85t): Command mech with mixed weapons
 - **Atlas AS7-D** (100t): Iconic assault mech with AC/20 and LRM-20

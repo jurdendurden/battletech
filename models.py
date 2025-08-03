@@ -36,6 +36,9 @@ class Player(db.Model):
     turn_number = db.Column(db.Integer, default=1)
     active_mech_id = db.Column(db.Integer, db.ForeignKey('player_mech.id'), nullable=True)
     
+    # Mission tracking
+    declined_missions = db.Column(db.Text, default='[]')  # JSON array of declined mission IDs
+    
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     last_active = db.Column(db.DateTime, default=datetime.utcnow)
@@ -63,6 +66,21 @@ class Player(db.Model):
         """Get skill level (0 if not present)."""
         skills = self.get_skills()
         return skills.get(skill_name, 0)
+    
+    def get_declined_missions(self):
+        """Get list of declined mission IDs."""
+        return json.loads(self.declined_missions) if self.declined_missions else []
+    
+    def add_declined_mission(self, mission_id):
+        """Add a mission ID to the declined list."""
+        declined = self.get_declined_missions()
+        if mission_id not in declined:
+            declined.append(mission_id)
+            self.declined_missions = json.dumps(declined)
+    
+    def clear_declined_missions(self):
+        """Clear all declined missions (when moving or ending turn)."""
+        self.declined_missions = '[]'
     
     def can_afford(self, cost):
         """Check if player can afford something."""
@@ -181,6 +199,7 @@ class Player(db.Model):
             'movement_points_remaining': self.movement_points_remaining,
             'movement_points_total': self.get_movement_points(),
             'turn_number': self.turn_number,
+            'declined_missions': self.get_declined_missions(),
             'active_mech': active_mech.to_dict() if active_mech else None,
             'mechs': [mech.to_dict() for mech in self.mechs],
             'vehicles': [vehicle.to_dict() for vehicle in self.vehicles]

@@ -186,7 +186,7 @@
             background: none;
             border: none;
             font-size: 24px;
-            color: var(--text-secondary);
+            color: var(--text-primary);
             cursor: pointer;
             padding: 0;
             width: 30px;
@@ -329,6 +329,22 @@
         .buy-btn:disabled {
             background-color: var(--border-color);
             cursor: not-allowed;
+        }
+        
+        .decline-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            margin-left: 8px;
+        }
+        
+        .decline-btn:hover {
+            background-color: #c82333;
         }
         
         .hidden {
@@ -569,6 +585,11 @@
             color: white;
         }
         
+        .unit-status.active {
+            background-color: #9C27B0;
+            color: white;
+        }
+        
         .unit-condition {
             margin-bottom: 16px;
         }
@@ -659,6 +680,14 @@
             background-color: #1976D2;
         }
         
+        .unit-btn.active {
+            background-color: #FF9800;
+        }
+        
+        .unit-btn.active:hover {
+            background-color: #F57C00;
+        }
+        
         .upgrade-section {
             padding: 20px;
             text-align: center;
@@ -686,6 +715,65 @@
         
         .upgrade-info li {
             margin-bottom: 8px;
+        }
+        
+        /* Starting Mech Selection Styles */
+        .starting-mech-selection {
+            margin-bottom: 15px;
+        }
+        
+        .starting-mechs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .starting-mech-card {
+            background-color: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .starting-mech-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .starting-mech-card.selected {
+            border-color: var(--accent-primary);
+            background-color: rgba(74, 158, 255, 0.1);
+            box-shadow: 0 0 0 2px var(--accent-primary);
+        }
+        
+        .starting-mech-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .starting-mech-model {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .starting-mech-specs {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .starting-mech-description {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            font-style: italic;
         }
     </style>
 </head>
@@ -771,6 +859,12 @@
                             <span>(0=best, 8=worst)</span>
                         </div>
                     </div>
+                    <div class="starting-mech-selection">
+                        <h4 class="battletech-label">Choose Your Starting Mech:</h4>
+                        <div id="starting_mechs_list" class="starting-mechs-grid">
+                            <!-- Starting mechs will be loaded here -->
+                        </div>
+                    </div>
                     <div class="game-controls">
                         <button onclick="createCharacter()">Create Character</button>
                         <button onclick="loadCharacter()">Load Character</button>
@@ -800,7 +894,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="battletech-heading">MechWarrior Hub</h3>
-                        <button class="close-btn" onclick="hideShopModal()">&times;</button>
+                        <button class="close-btn" onclick="hideShopModal()">X</button>
                     </div>
                     
                     <div class="modal-tabs">
@@ -839,7 +933,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="battletech-heading">MechWarrior Hangar</h3>
-                        <button class="close-btn" onclick="hideHangarModal()">&times;</button>
+                        <button class="close-btn" onclick="hideHangarModal()">X</button>
                     </div>
                     
                     <div class="modal-tabs">
@@ -1069,6 +1163,11 @@
                 return;
             }
             
+            if (!selectedStartingMech) {
+                addToOutput('Please select a starting mech.');
+                return;
+            }
+            
             fetch('/create_character', {
                 method: 'POST',
                 headers: {
@@ -1080,7 +1179,8 @@
                     piloting: piloting,
                     guts: guts,
                     tactics: tactics,
-                    skills: {}
+                    skills: {},
+                    starting_mech: selectedStartingMech
                 })
             })
             .then(response => response.json())
@@ -1181,6 +1281,12 @@
                                 <span>(0=best, 8=worst)</span>
                             </div>
                         </div>
+                        <div class="starting-mech-selection">
+                            <h4 class="battletech-label">Choose Your Starting Mech:</h4>
+                            <div id="starting_mechs_list" class="starting-mechs-grid">
+                                <!-- Starting mechs will be loaded here -->
+                            </div>
+                        </div>
                         <div class="game-controls">
                             <button onclick="createCharacter()">Create Character</button>
                             <button onclick="loadCharacter()">Load Character</button>
@@ -1195,6 +1301,9 @@
             
             // Initialize the skill allocation system
             updatePointsRemaining();
+            
+            // Load starting mechs for the new character section
+            loadStartingMechs();
         }
 
         function logoutCharacter() {
@@ -1278,8 +1387,7 @@
                 <div>Position: (${currentPlayer.exact_position.x.toFixed(1)}, ${currentPlayer.exact_position.y.toFixed(1)})</div>
                 <div>Mechs: ${currentPlayer.mechs.length}</div>
                 <div class="game-controls" style="margin-top: 10px;">
-                    <button onclick="endTurn()" ${currentPlayer.movement_points_remaining > 0 ? '' : 'disabled'}>End Turn</button>
-                    <button onclick="selectActiveMech()" ${currentPlayer.mechs.length > 0 ? '' : 'disabled'}>Select Mech</button>
+                    <button onclick="endTurn()" ${currentPlayer.movement_points_remaining <= 0 ? '' : 'disabled'}>End Turn</button>
                 </div>
             `;
             addDebugOutput('Player info panel updated');
@@ -1328,10 +1436,67 @@
         function initializeSkillAllocation() {
             updatePointsRemaining();
         }
+        
+        // Starting mech selection
+        let selectedStartingMech = null;
+        
+        function loadStartingMechs() {
+            fetch('/get_starting_mechs')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const list = document.getElementById('starting_mechs_list');
+                    list.innerHTML = '';
+                    
+                    data.starting_mechs.forEach(mech => {
+                        const div = document.createElement('div');
+                        div.className = 'starting-mech-card';
+                        div.onclick = () => selectStartingMech(mech.name, div);
+                        
+                        const movement = mech.movement_points || {};
+                        const weapons = mech.weapons || [];
+                        const weaponList = weapons.map(w => `${w.quantity}x ${w.type}`).join(', ') || 'None';
+                        
+                        div.innerHTML = `
+                            <div class="starting-mech-name">${mech.name}</div>
+                            <div class="starting-mech-model">${mech.model}</div>
+                            <div class="starting-mech-specs">
+                                <div><strong>Tonnage:</strong> ${mech.tonnage}t</div>
+                                <div><strong>Walk:</strong> ${movement.walking || 'N/A'} | <strong>Run:</strong> ${movement.running || 'N/A'}</div>
+                                <div><strong>Armor:</strong> ${mech.armor ? Object.values(mech.armor).reduce((a, b) => a + b, 0) : 'N/A'}</div>
+                            </div>
+                            <div class="starting-mech-description">
+                                Weapons: ${weaponList}
+                            </div>
+                        `;
+                        list.appendChild(div);
+                    });
+                } else {
+                    addToOutput('Error loading starting mechs: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error loading starting mechs: ' + error);
+            });
+        }
+        
+        function selectStartingMech(mechName, element) {
+            // Remove selection from all cards
+            document.querySelectorAll('.starting-mech-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Select the clicked card
+            element.classList.add('selected');
+            selectedStartingMech = mechName;
+            
+            addDebugOutput(`Selected starting mech: ${mechName}`);
+        }
 
         // Call initialization when page loads
         window.addEventListener('load', function() {
             initializeSkillAllocation();
+            loadStartingMechs();
         });
 
         // Map functions
@@ -1899,6 +2064,7 @@
                             </div>
                             <div class="item-actions">
                                 <button class="buy-btn" onclick="startMission('${mission.id}')">Start Mission</button>
+                                <button class="decline-btn" onclick="declineMission('${mission.id}')">Decline</button>
                             </div>
                         `;
                         list.appendChild(div);
@@ -1940,6 +2106,34 @@
                 })
                 .catch(error => {
                     addToOutput('Error starting mission: ' + error);
+                });
+            }
+        }
+
+        function declineMission(missionId) {
+            if (confirm('Are you sure you want to decline this mission? It will disappear until you move or end your turn.')) {
+                fetch('/decline_mission', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        mission_id: missionId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        currentPlayer = data.player;
+                        addToOutput(data.message);
+                        showPlayerInfo();
+                        loadMissions(); // Reload missions to hide the declined one
+                    } else {
+                        addToOutput('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    addToOutput('Error declining mission: ' + error);
                 });
             }
         }
@@ -2055,11 +2249,13 @@
                 
                 const status = getUnitStatus(mech.armor_condition, mech.internal_condition, true);
                 const template = mech.template;
+                const isActive = currentPlayer && currentPlayer.active_mech && currentPlayer.active_mech.id === mech.id;
                 
                 div.innerHTML = `
                     <div class="unit-header">
                         <h4 class="unit-name">${mech.display_name}</h4>
                         <div class="unit-status ${status.class}">${status.text}</div>
+                        ${isActive ? '<div class="unit-status active">Active</div>' : ''}
                     </div>
                     <div class="unit-condition">
                         <div>Armor Condition: ${Math.round(mech.armor_condition * 100)}%</div>
@@ -2085,6 +2281,9 @@
                         </button>
                         <button class="unit-btn rename" onclick="renameUnit('mech', ${mech.id}, '${mech.display_name}')">
                             Rename
+                        </button>
+                        <button class="unit-btn active" onclick="setActiveMech(${mech.id})" ${mech.operational ? '' : 'disabled'}>
+                            ${isActive ? 'Currently Active' : 'Set Active'}
                         </button>
                     </div>
                 `;
