@@ -1,0 +1,166 @@
+{
+  "hangar_levels": {
+    "basic": {
+      "name": "Basic Hangar",
+      "description": "Standard MechWarrior hangar with basic repair facilities",
+      "mech_capacity": 4,
+      "vehicle_capacity": 2,
+      "repair_speed_multiplier": 1.0,
+      "repair_cost_multiplier": 1.0,
+      "upgrade_cost": 0,
+      "requirements": {
+        "min_level": 1
+      }
+    },
+    "expanded": {
+      "name": "Expanded Hangar",
+      "description": "Larger hangar with additional mech bays and improved tools",
+      "mech_capacity": 8,
+      "vehicle_capacity": 4,
+      "repair_speed_multiplier": 1.2,
+      "repair_cost_multiplier": 0.9,
+      "upgrade_cost": 500000,
+      "requirements": {
+        "min_level": 5,
+        "total_value": 10000000
+      }
+    },
+    "advanced": {
+      "name": "Advanced Hangar",
+      "description": "State-of-the-art facilities with automated repair systems",
+      "mech_capacity": 12,
+      "vehicle_capacity": 6,
+      "repair_speed_multiplier": 1.5,
+      "repair_cost_multiplier": 0.8,
+      "upgrade_cost": 1500000,
+      "requirements": {
+        "min_level": 10,
+        "total_value": 25000000
+      }
+    },
+    "industrial": {
+      "name": "Industrial Complex",
+      "description": "Massive industrial hangar complex with manufacturing capabilities",
+      "mech_capacity": 20,
+      "vehicle_capacity": 10,
+      "repair_speed_multiplier": 2.0,
+      "repair_cost_multiplier": 0.7,
+      "upgrade_cost": 5000000,
+      "requirements": {
+        "min_level": 15,
+        "total_value": 50000000
+      }
+    }
+  },
+  "facility_upgrades": {
+    "mech_customization_bay": {
+      "name": "Mech Customization Bay",
+      "description": "Allows weapon and equipment modifications to BattleMechs",
+      "cost": 750000,
+      "requirements": {
+        "hangar_level": "expanded",
+        "min_level": 8
+      },
+      "benefits": [
+        "Unlock mech weapon customization",
+        "5% discount on weapon purchases",
+        "Faster equipment installation"
+      ]
+    },
+    "vehicle_workshop": {
+      "name": "Vehicle Workshop",
+      "description": "Specialized facility for vehicle maintenance and upgrades",
+      "cost": 400000,
+      "requirements": {
+        "hangar_level": "expanded",
+        "min_level": 6
+      },
+      "benefits": [
+        "20% faster vehicle repairs",
+        "10% discount on vehicle repair costs",
+        "Unlock vehicle modifications"
+      ]
+    },
+    "automated_repair_systems": {
+      "name": "Automated Repair Systems",
+      "description": "AI-controlled repair drones for faster maintenance",
+      "cost": 1200000,
+      "requirements": {
+        "hangar_level": "advanced",
+        "min_level": 12
+      },
+      "benefits": [
+        "Automatic minor repairs after missions",
+        "50% faster repair times",
+        "Reduced technician costs"
+      ]
+    },
+    "armor_fabrication_plant": {
+      "name": "Armor Fabrication Plant",
+      "description": "On-site armor plate manufacturing facility",
+      "cost": 2000000,
+      "requirements": {
+        "hangar_level": "advanced",
+        "min_level": 15
+      },
+      "benefits": [
+        "25% discount on armor repairs",
+        "Custom armor types available",
+        "Faster armor replacement"
+      ]
+    },
+    "defense_turrets": {
+      "name": "Hangar Defense Turrets",
+      "description": "Automated defense systems to protect the hangar",
+      "cost": 800000,
+      "requirements": {
+        "hangar_level": "expanded",
+        "min_level": 10
+      },
+      "benefits": [
+        "Protect hangar from raids",
+        "Reduce insurance costs",
+        "Boost crew morale"
+      ]
+    },
+    "medical_bay": {
+      "name": "Medical Bay",
+      "description": "Advanced medical facilities for pilot care",
+      "cost": 600000,
+      "requirements": {
+        "hangar_level": "expanded",
+        "min_level": 7
+      },
+      "benefits": [
+        "Faster pilot recovery from injuries",
+        "Reduced pilot medical costs",
+        "Improved pilot survival rates"
+      ]
+    }
+  },
+  "consumables": {
+    "repair_kit": {
+      "name": "Emergency Repair Kit",
+      "description": "Field repair kit for minor damage",
+      "cost": 5000,
+      "repair_amount": 0.1,
+      "uses": 1
+    },
+    "armor_patches": {
+      "name": "Armor Patch Kit",
+      "description": "Quick armor repair patches",
+      "cost": 15000,
+      "repair_amount": 0.25,
+      "uses": 1,
+      "armor_only": true
+    },
+    "complete_overhaul": {
+      "name": "Complete Overhaul",
+      "description": "Full factory restoration service",
+      "cost": 100000,
+      "repair_amount": 1.0,
+      "uses": 1,
+      "time_required": 7
+    }
+  }
+} 

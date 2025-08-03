@@ -1,0 +1,2549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BattleTech MUD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Game-specific styles */
+        .game-container {
+            display: flex;
+            gap: 20px;
+            height: 100vh;
+            padding: 20px;
+        }
+        
+        .map-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .text-output {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .player-info {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 10px;
+        }
+        
+        .character-creation {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .skill-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .skill-input label {
+            min-width: 80px;
+        }
+        
+        .skill-input input {
+            width: 60px;
+            margin-bottom: 0;
+        }
+        
+        .skill-allocation {
+            border: 2px solid var(--accent-primary);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: rgba(74, 158, 255, 0.1);
+        }
+        
+        .points-display {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px;
+            background-color: var(--bg-secondary);
+            border-radius: 4px;
+        }
+        
+        .points-display.invalid {
+            color: var(--error-color);
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+        
+        .skill-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 5px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--accent-primary);
+            border: 2px solid var(--accent-secondary);
+        }
+        
+        .skill-btn:hover {
+            background-color: var(--accent-secondary);
+            transform: scale(1.1);
+        }
+        
+        .skill-btn:disabled {
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .skill-input input[readonly] {
+            background-color: var(--bg-primary);
+            color: var(--accent-primary);
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid var(--accent-primary);
+            width: 50px;
+        }
+        
+        .game-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .encounter-panel {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        /* Modal styles */
+        .shop-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            max-width: 900px;
+            max-height: 80vh;
+            width: 90%;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background-color: var(--hover-color);
+            color: var(--text-primary);
+        }
+        
+        .modal-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tab-btn {
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab-btn:hover {
+            background-color: var(--hover-color);
+            color: var(--text-primary);
+        }
+        
+        .tab-btn.active {
+            background-color: var(--bg-secondary);
+            color: var(--accent-primary);
+            border-bottom: 2px solid var(--accent-primary);
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .shop-items {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .shop-item {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .shop-item:hover {
+            border-color: var(--accent-primary);
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .item-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .item-price {
+            color: var(--accent-primary);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .item-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+        
+        .item-detail {
+            color: var(--text-secondary);
+        }
+        
+        .item-detail strong {
+            color: var(--text-primary);
+        }
+        
+        .item-description {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .item-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .buy-btn {
+            background-color: var(--accent-primary);
+            color: var(--text-primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        
+        .buy-btn:hover {
+            background-color: var(--accent-secondary);
+        }
+        
+        .buy-btn:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #map_canvas {
+            border: 2px solid var(--border-color);
+            cursor: grab;
+        }
+
+        #map_canvas:active {
+            cursor: grabbing;
+        }
+
+        #map_container {
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        #tooltip {
+            position: absolute;
+            pointer-events: none;
+            display: none;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+        
+        .player-marker {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #ff0000;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        /* Dropdown Menu Styles */
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-btn {
+            background-color: var(--accent-primary);
+            color: var(--text-primary);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .dropdown-btn:hover {
+            background-color: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            min-width: 200px;
+            z-index: 1000;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: var(--text-primary);
+            font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9em;
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--hover-color);
+            color: var(--accent-primary);
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 4px 0;
+        }
+        
+        .dropdown-menu.hidden {
+            display: none;
+        }
+        
+        /* Debug toggle specific styling */
+        #debug-toggle-text {
+            font-size: 0.8em;
+        }
+        
+        /* Hangar Modal Styles */
+        .hangar-stats {
+            padding: 20px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            border-color: var(--accent-primary);
+        }
+        
+        .stat-card h4 {
+            color: var(--accent-primary);
+            margin: 0 0 8px 0;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+        }
+        
+        .hangar-actions {
+            text-align: center;
+        }
+        
+        .repair-all-btn {
+            background-color: var(--accent-secondary);
+            color: var(--text-primary);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .repair-all-btn:hover {
+            background-color: var(--accent-primary);
+            transform: translateY(-1px);
+        }
+        
+        .repair-all-btn:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .hangar-units {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .unit-card {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .unit-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .unit-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .unit-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .unit-status.operational {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .unit-status.damaged {
+            background-color: #FF9800;
+            color: white;
+        }
+        
+        .unit-status.destroyed {
+            background-color: #F44336;
+            color: white;
+        }
+        
+        .unit-condition {
+            margin-bottom: 16px;
+        }
+        
+        .condition-bar {
+            background-color: var(--bg-secondary);
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+            margin-top: 4px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .condition-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .condition-fill.armor {
+            background-color: #2196F3;
+        }
+        
+        .condition-fill.internal {
+            background-color: #FF5722;
+        }
+        
+        .condition-fill.vehicle {
+            background-color: #4CAF50;
+        }
+        
+        .unit-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            margin-bottom: 16px;
+            font-size: 0.9em;
+        }
+        
+        .unit-spec {
+            color: var(--text-secondary);
+        }
+        
+        .unit-spec strong {
+            color: var(--text-primary);
+        }
+        
+        .unit-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .unit-btn {
+            background-color: var(--accent-primary);
+            color: var(--text-primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .unit-btn:hover {
+            background-color: var(--accent-secondary);
+        }
+        
+        .unit-btn:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+        }
+        
+        .unit-btn.repair {
+            background-color: #4CAF50;
+        }
+        
+        .unit-btn.repair:hover {
+            background-color: #45a049;
+        }
+        
+        .unit-btn.rename {
+            background-color: #2196F3;
+        }
+        
+        .unit-btn.rename:hover {
+            background-color: #1976D2;
+        }
+        
+        .upgrade-section {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .upgrade-info {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+        
+        .upgrade-info h4 {
+            color: var(--accent-primary);
+            margin-bottom: 16px;
+        }
+        
+        .upgrade-info ul {
+            text-align: left;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .upgrade-info li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Map Section -->
+        <div class="map-section">
+            <header>
+                <h1 class="battletech-title">BattleTech MUD</h1>
+            </header>
+            
+            <div class="controls">
+                <div class="dropdown-container">
+                    <button class="dropdown-btn" onclick="toggleDropdown()">
+                        Game Menu ▼
+                    </button>
+                    <div id="dropdown-menu" class="dropdown-menu hidden">
+                        <div class="dropdown-item" onclick="showNewCharacter()">New Character</div>
+                        <div class="dropdown-item" onclick="showLoadCharacter()">Load Character</div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="openMechShop()">Mech Shop</div>
+                        <div class="dropdown-item" onclick="openHangar()">Hangar</div>
+                        <div class="dropdown-item" onclick="generateNewMap()">Generate New Map</div>
+                        <div class="dropdown-item" onclick="showSettings()">Settings</div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="toggleDebugMessages()">
+                            <span id="debug-toggle-text">Debug Messages: OFF</span>
+                        </div>
+                        <div class="dropdown-item" onclick="showAbout()">About</div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="logout()">Logout</div>
+                    </div>
+                </div>
+                <div id="loading" class="loading-spinner" style="display: none;"></div>
+            </div>
+            
+            <div class="card" id="map_container">
+                <canvas id="map_canvas" width="832" height="832"></canvas>
+                <div id="tooltip" class="tooltip"></div>
+                <div id="player_marker" class="player-marker hidden"></div>
+            </div>
+        </div>
+        
+        <!-- Game Panel -->
+        <div class="game-panel">
+            <!-- Character Creation/Loading -->
+            <div id="character_section" class="character-creation">
+                <h3 class="battletech-heading">Character</h3>
+                <div id="character_creation">
+                    <div class="skill-input">
+                        <label for="char_name" class="battletech-label">Name:</label>
+                        <input type="text" id="char_name" placeholder="Enter character name">
+                    </div>
+                    <div class="skill-allocation">
+                        <h4 class="battletech-label">Skill Allocation (10 points total):</h4>
+                        <div id="points_remaining" class="points-display">Points Remaining: 10</div>
+                        <div class="skill-input">
+                            <label for="gunnery" class="battletech-label">Gunnery:</label>
+                            <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', 1)">+</button>
+                            <input type="number" id="gunnery" min="0" max="8" value="8" readonly>
+                            <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', -1)">-</button>
+                            <span>(0=best, 8=worst)</span>
+                        </div>
+                        <div class="skill-input">
+                            <label for="piloting" class="battletech-label">Piloting:</label>
+                            <button type="button" class="skill-btn" onclick="adjustSkill('piloting', 1)">+</button>
+                            <input type="number" id="piloting" min="0" max="8" value="8" readonly>
+                            <button type="button" class="skill-btn" onclick="adjustSkill('piloting', -1)">-</button>
+                            <span>(0=best, 8=worst)</span>
+                        </div>
+                        <div class="skill-input">
+                            <label for="guts" class="battletech-label">Guts:</label>
+                            <button type="button" class="skill-btn" onclick="adjustSkill('guts', 1)">+</button>
+                            <input type="number" id="guts" min="0" max="8" value="8" readonly>
+                            <button type="button" class="skill-btn" onclick="adjustSkill('guts', -1)">-</button>
+                            <span>(0=best, 8=worst)</span>
+                        </div>
+                        <div class="skill-input">
+                            <label for="tactics" class="battletech-label">Tactics:</label>
+                            <button type="button" class="skill-btn" onclick="adjustSkill('tactics', 1)">+</button>
+                            <input type="number" id="tactics" min="0" max="8" value="8" readonly>
+                            <button type="button" class="skill-btn" onclick="adjustSkill('tactics', -1)">-</button>
+                            <span>(0=best, 8=worst)</span>
+                        </div>
+                    </div>
+                    <div class="game-controls">
+                        <button onclick="createCharacter()">Create Character</button>
+                        <button onclick="loadCharacter()">Load Character</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Player Info -->
+            <div id="player_info" class="player-info hidden">
+                <h3 class="battletech-heading">Player Info</h3>
+                <div id="player_stats"></div>
+
+            </div>
+            
+            <!-- Encounter Panel -->
+            <div id="encounter_panel" class="encounter-panel hidden">
+                <h3 class="battletech-heading">Encounter</h3>
+                <div id="encounter_info"></div>
+                <div class="game-controls">
+                    <button onclick="resolveEncounter('engage')">Engage</button>
+                    <button onclick="resolveEncounter('flee')">Flee</button>
+                </div>
+            </div>
+            
+            <!-- Mech Shop Modal -->
+            <div id="shop_modal" class="shop-modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="battletech-heading">MechWarrior Hub</h3>
+                        <button class="close-btn" onclick="hideShopModal()">&times;</button>
+                    </div>
+                    
+                    <div class="modal-tabs">
+                        <button class="tab-btn active" onclick="showShopTab('mechs')">Mechs</button>
+                        <button class="tab-btn" onclick="showShopTab('weapons')">Weapons</button>
+                        <button class="tab-btn" onclick="showShopTab('equipment')">Equipment</button>
+                        <button class="tab-btn" onclick="showShopTab('missions')">Missions</button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <!-- Mechs Tab -->
+                        <div id="mechs_tab" class="tab-content active">
+                            <div id="mechs_list" class="shop-items"></div>
+                        </div>
+                        
+                        <!-- Weapons Tab -->
+                        <div id="weapons_tab" class="tab-content">
+                            <div id="weapons_list" class="shop-items"></div>
+                        </div>
+                        
+                        <!-- Equipment Tab -->
+                        <div id="equipment_tab" class="tab-content">
+                            <div id="equipment_list" class="shop-items"></div>
+                        </div>
+                        
+                        <!-- Missions Tab -->
+                        <div id="missions_tab" class="tab-content">
+                            <div id="missions_list" class="shop-items"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hangar Modal -->
+            <div id="hangar_modal" class="shop-modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="battletech-heading">MechWarrior Hangar</h3>
+                        <button class="close-btn" onclick="hideHangarModal()">&times;</button>
+                    </div>
+                    
+                    <div class="modal-tabs">
+                        <button class="tab-btn active" onclick="showHangarTab('overview')">Overview</button>
+                        <button class="tab-btn" onclick="showHangarTab('mechs')">BattleMechs</button>
+                        <button class="tab-btn" onclick="showHangarTab('vehicles')">Vehicles</button>
+                        <button class="tab-btn" onclick="showHangarTab('upgrades')">Upgrades</button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <!-- Overview Tab -->
+                        <div id="hangar_overview_tab" class="tab-content active">
+                            <div id="hangar_stats" class="hangar-stats">
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <h4>BattleMechs</h4>
+                                        <div class="stat-value" id="mech_count">0/0</div>
+                                        <div class="stat-label">Operational/Total</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <h4>Vehicles</h4>
+                                        <div class="stat-value" id="vehicle_count">0/0</div>
+                                        <div class="stat-label">Operational/Total</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <h4>Total Value</h4>
+                                        <div class="stat-value" id="hangar_value">0</div>
+                                        <div class="stat-label">Credits</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <h4>Repair Costs</h4>
+                                        <div class="stat-value" id="repair_costs">0</div>
+                                        <div class="stat-label">Credits</div>
+                                    </div>
+                                </div>
+                                <div class="hangar-actions">
+                                    <button class="repair-all-btn" onclick="repairAllUnits()">Repair All Units</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mechs Tab -->
+                        <div id="hangar_mechs_tab" class="tab-content">
+                            <div id="hangar_mechs_list" class="hangar-units"></div>
+                        </div>
+                        
+                        <!-- Vehicles Tab -->
+                        <div id="hangar_vehicles_tab" class="tab-content">
+                            <div id="hangar_vehicles_list" class="hangar-units"></div>
+                        </div>
+                        
+                        <!-- Upgrades Tab -->
+                        <div id="hangar_upgrades_tab" class="tab-content">
+                            <div class="upgrade-section">
+                                <h4>Hangar Facilities</h4>
+                                <div class="upgrade-info">
+                                    <p>Hangar upgrades coming soon! Future improvements will include:</p>
+                                    <ul>
+                                        <li>Expanded mech bays for larger lance capacity</li>
+                                        <li>Advanced repair facilities for faster maintenance</li>
+                                        <li>Mech customization bays for weapon modifications</li>
+                                        <li>Vehicle maintenance workshops</li>
+                                        <li>Automated defense systems</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Text Output -->
+            <div class="text-output" id="text_output">
+                <div>Welcome to BattleTech MUD!</div>
+                <div>Create or load a character to begin your journey.</div>
+                <div>Click on the map to move your character.</div>
+                <div>---</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let currentPlayer = null;
+        let currentMapData = null;
+        let currentEncounter = null;
+        
+        // Constants for hexagon drawing
+        const HEX_SIZE = 13;
+        const BORDER_WIDTH = 1;
+        
+        // Variables for dragging
+        let isDragging = false;
+        let startDragX = 0;
+        let startDragY = 0;
+        let mapOffsetX = 0;
+        let mapOffsetY = 0;
+        let lastMapOffsetX = 0;
+        let lastMapOffsetY = 0;
+
+        // Text output functions
+        function addToOutput(message) {
+            const output = document.getElementById('text_output');
+            const div = document.createElement('div');
+            div.textContent = message;
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function addDebugOutput(message) {
+            if (debugMessages) {
+                const output = document.getElementById('text_output');
+                const div = document.createElement('div');
+                div.textContent = '[DEBUG] ' + message;
+                div.style.color = '#888';
+                div.style.fontSize = '0.9em';
+                output.appendChild(div);
+                output.scrollTop = output.scrollHeight;
+            }
+        }
+
+        function clearOutput() {
+            document.getElementById('text_output').innerHTML = '';
+        }
+
+        // Point allocation system
+        function updatePointsRemaining() {
+            const gunnery = parseInt(document.getElementById('gunnery').value) || 8;
+            const piloting = parseInt(document.getElementById('piloting').value) || 8;
+            const guts = parseInt(document.getElementById('guts').value) || 8;
+            const tactics = parseInt(document.getElementById('tactics').value) || 8;
+            
+            // Calculate points spent (starting skills were 32, current total shows remaining)
+            const currentTotal = gunnery + piloting + guts + tactics;
+            const pointsSpent = 32 - currentTotal; // Started with all skills at 8 (32 total)
+            const pointsRemaining = 10 - pointsSpent;
+            
+            const display = document.getElementById('points_remaining');
+            
+            if (pointsRemaining < 0) {
+                display.textContent = `Points Over Limit: ${Math.abs(pointsRemaining)}`;
+                display.className = 'points-display invalid';
+            } else if (pointsRemaining > 0) {
+                display.textContent = `Points Remaining: ${pointsRemaining}`;
+                display.className = 'points-display';
+            } else {
+                display.textContent = 'All Points Allocated!';
+                display.className = 'points-display';
+            }
+            
+            // Update button states
+            updateSkillButtons();
+        }
+
+        function adjustSkill(skillName, change) {
+            const input = document.getElementById(skillName);
+            const currentValue = parseInt(input.value);
+            const newValue = currentValue + change;
+            
+            // Check bounds
+            if (newValue < 0 || newValue > 8) {
+                return;
+            }
+            
+            // Check if we have points to spend (can only reduce skills if we have points)
+            if (change < 0) { // Improving skill (reducing number)
+                const gunnery = parseInt(document.getElementById('gunnery').value) || 8;
+                const piloting = parseInt(document.getElementById('piloting').value) || 8;
+                const guts = parseInt(document.getElementById('guts').value) || 8;
+                const tactics = parseInt(document.getElementById('tactics').value) || 8;
+                
+                const currentTotal = gunnery + piloting + guts + tactics;
+                const pointsSpent = 32 - currentTotal;
+                
+                if (pointsSpent >= 10) {
+                    return; // No more points to spend
+                }
+            }
+            
+            input.value = newValue;
+            updatePointsRemaining();
+        }
+
+        function updateSkillButtons() {
+            const skills = ['gunnery', 'piloting', 'guts', 'tactics'];
+            
+            // Calculate current state
+            let currentTotal = 0;
+            skills.forEach(skill => {
+                currentTotal += parseInt(document.getElementById(skill).value) || 8;
+            });
+            const pointsSpent = 32 - currentTotal;
+            const pointsRemaining = 10 - pointsSpent;
+            
+            skills.forEach(skill => {
+                const input = document.getElementById(skill);
+                const currentValue = parseInt(input.value);
+                const plusBtn = input.previousElementSibling;
+                const minusBtn = input.nextElementSibling;
+                
+                // Plus button (make skill worse) - always available unless at max (8)
+                plusBtn.disabled = currentValue >= 8;
+                
+                // Minus button (improve skill) - only available if we have points and not at min (0)
+                minusBtn.disabled = currentValue <= 0 || pointsRemaining <= 0;
+            });
+        }
+
+        // Character management
+        function createCharacter() {
+            const name = document.getElementById('char_name').value.trim();
+            const gunnery = parseInt(document.getElementById('gunnery').value) || 8;
+            const piloting = parseInt(document.getElementById('piloting').value) || 8;
+            const guts = parseInt(document.getElementById('guts').value) || 8;
+            const tactics = parseInt(document.getElementById('tactics').value) || 8;
+            
+            if (!name) {
+                addToOutput('Please enter a character name.');
+                return;
+            }
+            
+            // Validate point allocation (skills should total 22 after spending 10 points from starting 32)
+            const totalSkillPoints = gunnery + piloting + guts + tactics;
+            const pointsSpent = 32 - totalSkillPoints;
+            if (pointsSpent !== 10) {
+                addToOutput('You must spend exactly 10 points to improve your skills.');
+                return;
+            }
+            
+            fetch('/create_character', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    gunnery: gunnery,
+                    piloting: piloting,
+                    guts: guts,
+                    tactics: tactics,
+                    skills: {}
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentPlayer = data.player;
+                    addToOutput(data.message);
+                    addDebugOutput('Player data loaded: ' + JSON.stringify(data.player));
+                    showPlayerInfo();
+                    updatePlayerMarker();
+                    addDebugOutput('Player info shown and marker updated');
+                } else {
+                    addToOutput('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error creating character: ' + error);
+            });
+        }
+
+        function loadCharacter() {
+            const name = document.getElementById('char_name').value.trim();
+            
+            if (!name) {
+                addToOutput('Please enter a character name.');
+                return;
+            }
+            
+            fetch('/load_character', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentPlayer = data.player;
+                    addToOutput(data.message);
+                    showPlayerInfo();
+                    updatePlayerMarker();
+                } else {
+                    addToOutput('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error loading character: ' + error);
+            });
+        }
+
+        function recreateCharacterSection() {
+            // Check if character section already exists
+            if (document.getElementById('character_section')) {
+                return;
+            }
+            
+            // Create the character section HTML
+            const characterSectionHTML = `
+                <div id="character_section" class="character-creation">
+                    <h3 class="battletech-heading">Character</h3>
+                    <div id="character_creation">
+                        <div class="skill-input">
+                            <label for="char_name" class="battletech-label">Name:</label>
+                            <input type="text" id="char_name" placeholder="Enter character name">
+                        </div>
+                        <div class="skill-allocation">
+                            <h4 class="battletech-label">Skill Allocation (10 points total):</h4>
+                            <div id="points_remaining" class="points-display">Points Remaining: 10</div>
+                            <div class="skill-input">
+                                <label for="gunnery" class="battletech-label">Gunnery:</label>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', 1)">+</button>
+                                <input type="number" id="gunnery" min="0" max="8" value="8" readonly>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', -1)">-</button>
+                                <span>(0=best, 8=worst)</span>
+                            </div>
+                            <div class="skill-input">
+                                <label for="piloting" class="battletech-label">Piloting:</label>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('piloting', 1)">+</button>
+                                <input type="number" id="piloting" min="0" max="8" value="8" readonly>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('piloting', -1)">-</button>
+                                <span>(0=best, 8=worst)</span>
+                            </div>
+                            <div class="skill-input">
+                                <label for="guts" class="battletech-label">Guts:</label>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('guts', 1)">+</button>
+                                <input type="number" id="guts" min="0" max="8" value="8" readonly>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('guts', -1)">-</button>
+                                <span>(0=best, 8=worst)</span>
+                            </div>
+                            <div class="skill-input">
+                                <label for="tactics" class="battletech-label">Tactics:</label>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('tactics', 1)">+</button>
+                                <input type="number" id="tactics" min="0" max="8" value="8" readonly>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('tactics', -1)">-</button>
+                                <span>(0=best, 8=worst)</span>
+                            </div>
+                        </div>
+                        <div class="game-controls">
+                            <button onclick="createCharacter()">Create Character</button>
+                            <button onclick="loadCharacter()">Load Character</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Insert the character section at the beginning of the game panel
+            const gamePanel = document.querySelector('.game-panel');
+            gamePanel.insertAdjacentHTML('afterbegin', characterSectionHTML);
+            
+            // Initialize the skill allocation system
+            updatePointsRemaining();
+        }
+
+        function logoutCharacter() {
+            currentPlayer = null;
+            recreateCharacterSection();
+            document.getElementById('player_info').classList.add('hidden');
+            document.getElementById('encounter_panel').classList.add('hidden');
+            document.getElementById('shop_modal').classList.add('hidden');
+            document.getElementById('player_marker').classList.add('hidden');
+            addToOutput('Logged out. Create or load a character to continue.');
+        }
+
+        // Helper function to calculate experience needed for levels
+        function calculateExperienceForLevel(level) {
+            // Base experience formula: 100 * (level ^ 2.2)
+            return Math.floor(100 * Math.pow(level, 2.2));
+        }
+
+        function getExperienceProgress(currentXP, currentLevel) {
+            const currentLevelXP = calculateExperienceForLevel(currentLevel);
+            const nextLevelXP = calculateExperienceForLevel(currentLevel + 1);
+            const xpInCurrentLevel = currentXP - currentLevelXP;
+            const xpNeededForNextLevel = nextLevelXP - currentLevelXP;
+            
+            return {
+                current: Math.max(0, xpInCurrentLevel),
+                needed: xpNeededForNextLevel,
+                percentage: Math.min(100, Math.max(0, (xpInCurrentLevel / xpNeededForNextLevel) * 100)),
+                currentLevelXP: currentLevelXP,
+                nextLevelXP: nextLevelXP
+            };
+        }
+
+        function showPlayerInfo() {
+            addDebugOutput('showPlayerInfo called');
+            // Remove character section completely
+            const characterSection = document.getElementById('character_section');
+            if (characterSection) {
+                characterSection.remove();
+            }
+            document.getElementById('player_info').classList.remove('hidden');
+            
+            // Calculate experience progress
+            const expProgress = getExperienceProgress(currentPlayer.experience, currentPlayer.level);
+            
+            // Movement points display
+            const movementDisplay = currentPlayer.active_mech ? 
+                `<div class="movement-container">
+                    <div class="movement-text">
+                        <span class="movement-info">Movement Points</span>
+                        <span class="mp-numbers">${currentPlayer.movement_points_remaining.toFixed(1)}/${currentPlayer.movement_points_total}</span>
+                    </div>
+                    <div class="movement-bar">
+                        <div class="movement-fill" style="width: ${(currentPlayer.movement_points_remaining / currentPlayer.movement_points_total) * 100}%"></div>
+                    </div>
+                </div>` : 
+                '<div style="color: #ff9800;">No active mech - cannot move</div>';
+            
+            // Active mech display
+            const activeMechDisplay = currentPlayer.active_mech ? 
+                `<div>Active Mech: ${currentPlayer.active_mech.display_name}</div>` : 
+                '<div style="color: #ff9800;">No active mech selected</div>';
+            
+            const stats = document.getElementById('player_stats');
+            stats.innerHTML = `
+                <div><strong>${currentPlayer.name}</strong> (Level ${currentPlayer.level}) - Turn ${currentPlayer.turn_number}</div>
+                <div>Credits: ${currentPlayer.credits}</div>
+                <div class="experience-container">
+                    <div class="experience-text">
+                        <span class="level-info">Level ${currentPlayer.level} → ${currentPlayer.level + 1}</span>
+                        <span class="xp-numbers">${expProgress.current}/${expProgress.needed} XP</span>
+                    </div>
+                    <div class="experience-bar">
+                        <div class="experience-fill" style="width: ${expProgress.percentage}%"></div>
+                    </div>
+                </div>
+                ${movementDisplay}
+                ${activeMechDisplay}
+                <div>Gunnery: ${currentPlayer.gunnery} | Piloting: ${currentPlayer.piloting}</div>
+                <div>Guts: ${currentPlayer.guts} | Tactics: ${currentPlayer.tactics}</div>
+                <div>Position: (${currentPlayer.exact_position.x.toFixed(1)}, ${currentPlayer.exact_position.y.toFixed(1)})</div>
+                <div>Mechs: ${currentPlayer.mechs.length}</div>
+                <div class="game-controls" style="margin-top: 10px;">
+                    <button onclick="endTurn()" ${currentPlayer.movement_points_remaining > 0 ? '' : 'disabled'}>End Turn</button>
+                    <button onclick="selectActiveMech()" ${currentPlayer.mechs.length > 0 ? '' : 'disabled'}>Select Mech</button>
+                </div>
+            `;
+            addDebugOutput('Player info panel updated');
+        }
+
+        function updatePlayerMarker() {
+            addDebugOutput('updatePlayerMarker called');
+            if (!currentPlayer || !currentMapData) {
+                addDebugOutput('Missing player or map data - player: ' + !!currentPlayer + ', map: ' + !!currentMapData);
+                return;
+            }
+            
+            const marker = document.getElementById('player_marker');
+            const canvas = document.getElementById('map_canvas');
+            
+            // Calculate marker position using exact position (with fractional part)
+            const horizontalSpacing = HEX_SIZE * Math.sqrt(3);
+            const verticalSpacing = HEX_SIZE * 1.5;
+            
+            const exactPos = currentPlayer.exact_position;
+            const row = exactPos.y;
+            const col = exactPos.x;
+            
+            // Calculate hex offset for odd rows
+            const xOffset = (Math.floor(row) % 2) * (horizontalSpacing / 2);
+            
+            // Calculate fractional position within hex
+            const fracX = col - Math.floor(col);
+            const fracY = row - Math.floor(row);
+            
+            // Base position for the hex
+            const baseX = Math.floor(col) * horizontalSpacing + xOffset + HEX_SIZE;
+            const baseY = Math.floor(row) * verticalSpacing + HEX_SIZE;
+            
+            // Add fractional movement (half-hex movement)
+            const x = baseX + (fracX * horizontalSpacing) + mapOffsetX;
+            const y = baseY + (fracY * verticalSpacing) + mapOffsetY;
+            
+            marker.style.left = (x - 4) + 'px';
+            marker.style.top = (y - 4) + 'px';
+            marker.classList.remove('hidden');
+            addDebugOutput('Player marker positioned at (' + col.toFixed(1) + ', ' + row.toFixed(1) + ') -> (' + x.toFixed(1) + ', ' + y.toFixed(1) + ')');
+        }
+
+        // Initialize skill allocation system
+        function initializeSkillAllocation() {
+            updatePointsRemaining();
+        }
+
+        // Call initialization when page loads
+        window.addEventListener('load', function() {
+            initializeSkillAllocation();
+        });
+
+        // Map functions
+        function drawHexagon(ctx, x, y, size, color) {
+            const numberOfSides = 6;
+            const angle = 2 * Math.PI / numberOfSides;
+
+            ctx.beginPath();
+            for (let i = 0; i < numberOfSides; i++) {
+                const currentAngle = i * angle - Math.PI / 6;
+                const xPoint = x + size * Math.cos(currentAngle);
+                const yPoint = y + size * Math.sin(currentAngle);
+                
+                if (i === 0) {
+                    ctx.moveTo(xPoint, yPoint);
+                } else {
+                    ctx.lineTo(xPoint, yPoint);
+                }
+            }
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = BORDER_WIDTH;
+            ctx.stroke();
+        }
+
+        function drawMap(mapData, offsetX = 0, offsetY = 0) {
+            currentMapData = mapData;
+            const canvas = document.getElementById('map_canvas');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+            
+            const horizontalSpacing = HEX_SIZE * Math.sqrt(3);
+            const verticalSpacing = HEX_SIZE * 1.5;
+            
+            for (let row = 0; row < mapData.length; row++) {
+                for (let col = 0; col < mapData[row].length; col++) {
+                    const xOffset = (row % 2) * (horizontalSpacing / 2);
+                    const x = col * horizontalSpacing + xOffset + HEX_SIZE;
+                    const y = row * verticalSpacing + HEX_SIZE;
+                    
+                    drawHexagon(ctx, x, y, HEX_SIZE, mapData[row][col].color);
+                }
+            }
+            
+            ctx.restore();
+            updatePlayerMarker();
+        }
+
+        function getHexagonCoordinates(mouseX, mouseY) {
+            const horizontalSpacing = HEX_SIZE * Math.sqrt(3);
+            const verticalSpacing = HEX_SIZE * 1.5;
+            
+            const canvas = document.getElementById('map_canvas');
+            const rect = canvas.getBoundingClientRect();
+            const x = mouseX - rect.left - mapOffsetX;
+            const y = mouseY - rect.top - mapOffsetY;
+            
+            let row = Math.floor(y / verticalSpacing);
+            let col = Math.floor(x / horizontalSpacing);
+            
+            if (row % 2 === 1) {
+                col = Math.floor((x - horizontalSpacing / 2) / horizontalSpacing);
+            }
+            
+            row = Math.max(0, Math.min(row, currentMapData.length - 1));
+            col = Math.max(0, Math.min(col, currentMapData[0].length - 1));
+            
+            return { row, col };
+        }
+
+        function movePlayer(x, y) {
+            if (!currentPlayer || !currentMapData) return;
+            
+            const cell = currentMapData[y][x];
+            
+            fetch('/move_player', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    x: x,
+                    y: y,
+                    terrain_type: cell.terrain_type
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentPlayer = data.player;
+                    addToOutput(data.message);
+                    showPlayerInfo();
+                    updatePlayerMarker();
+                    
+                    if (data.encounter) {
+                        showEncounter(data.encounter);
+                    }
+                } else {
+                    addToOutput('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error moving: ' + error);
+            });
+        }
+
+        function endTurn() {
+            if (!currentPlayer) return;
+            
+            fetch('/end_turn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentPlayer = data.player;
+                    addToOutput(data.message);
+                    showPlayerInfo();
+                } else {
+                    addToOutput('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error ending turn: ' + error);
+            });
+        }
+
+        function selectActiveMech() {
+            if (!currentPlayer || !currentPlayer.mechs || currentPlayer.mechs.length === 0) {
+                addToOutput('No mechs available.');
+                return;
+            }
+            
+            // Show modal with mech selection
+            const operationalMechs = currentPlayer.mechs.filter(mech => mech.operational);
+            if (operationalMechs.length === 0) {
+                addToOutput('No operational mechs available.');
+                return;
+            }
+            
+            if (operationalMechs.length === 1) {
+                // Only one mech, select it automatically
+                setActiveMech(operationalMechs[0].id);
+                return;
+            }
+            
+            // Create selection dialog
+            let options = 'Select Active Mech:\n';
+            operationalMechs.forEach((mech, index) => {
+                const mp = mech.movement_points;
+                options += `${index + 1}. ${mech.display_name} (Walk: ${mp.walking}, Run: ${mp.running})\n`;
+            });
+            
+            const selection = prompt(options + '\nEnter number:');
+            const selectedIndex = parseInt(selection) - 1;
+            
+            if (selectedIndex >= 0 && selectedIndex < operationalMechs.length) {
+                setActiveMech(operationalMechs[selectedIndex].id);
+            }
+        }
+
+        function setActiveMech(mechId) {
+            if (!mechId) return;
+            
+            fetch('/set_active_mech', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mech_id: mechId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentPlayer = data.player;
+                    addToOutput(data.message);
+                    showPlayerInfo();
+                } else {
+                    addToOutput('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error setting active mech: ' + error);
+            });
+        }
+
+        function calculateMovementCost(targetX, targetY) {
+            if (!currentPlayer || !currentMapData) return 0;
+            
+            const currentPos = currentPlayer.exact_position;
+            const cell = currentMapData[targetY][targetX];
+            
+            // Calculate distance in half-hexes
+            const distance = Math.abs(targetX - currentPos.x) + Math.abs(targetY - currentPos.y);
+            
+            // Get terrain cost
+            const terrainCosts = {
+                'plains': 1,
+                'forest': 2,
+                'hills': 2,
+                'mountains': 3,
+                'desert': 2,
+                'jungle': 3,
+                'tundra': 2,
+                'beach': 1,
+                'shallow_water': 4,
+                'deep_ocean': 10,
+                'snow_peaks': 5
+            };
+            
+            const terrainCost = terrainCosts[cell.terrain_type] || 1;
+            return distance * terrainCost;
+        }
+
+        // Encounter functions
+        function showEncounter(encounter) {
+            currentEncounter = encounter;
+            const panel = document.getElementById('encounter_panel');
+            const info = document.getElementById('encounter_info');
+            
+            info.innerHTML = `
+                <div><strong>${encounter.name}</strong></div>
+                <div>${encounter.description}</div>
+                <div>Success Chance: ${Math.round(encounter.success_chance * 100)}%</div>
+            `;
+            
+            panel.classList.remove('hidden');
+            addToOutput(`Encounter: ${encounter.name}`);
+        }
+
+        function resolveEncounter(action) {
+            if (!currentEncounter) return;
+            
+            fetch('/resolve_encounter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    encounter: currentEncounter,
+                    action: action
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentPlayer = data.player;
+                    addToOutput(data.result.message);
+                    showPlayerInfo();
+                    
+                    document.getElementById('encounter_panel').classList.add('hidden');
+                    currentEncounter = null;
+                } else {
+                    addToOutput('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error resolving encounter: ' + error);
+            });
+        }
+
+        // Shop modal functions
+        function showShopModal() {
+            document.getElementById('shop_modal').classList.remove('hidden');
+            showShopTab('mechs'); // Default to mechs tab
+        }
+
+        function hideShopModal() {
+            document.getElementById('shop_modal').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside of it
+        document.addEventListener('click', function(event) {
+            const shopModal = document.getElementById('shop_modal');
+            const hangarModal = document.getElementById('hangar_modal');
+            
+            // Handle shop modal click outside
+            if (event.target === shopModal && !shopModal.querySelector('.modal-content').contains(event.target)) {
+                hideShopModal();
+            }
+            
+            // Handle hangar modal click outside
+            if (event.target === hangarModal && !hangarModal.querySelector('.modal-content').contains(event.target)) {
+                hideHangarModal();
+            }
+        });
+
+        // Close modal when pressing escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' || event.keyCode === 27) {
+                const shopModal = document.getElementById('shop_modal');
+                const hangarModal = document.getElementById('hangar_modal');
+                
+                // Close shop modal if open
+                if (shopModal && !shopModal.classList.contains('hidden')) {
+                    hideShopModal();
+                }
+                
+                // Close hangar modal if open
+                if (hangarModal && !hangarModal.classList.contains('hidden')) {
+                    hideHangarModal();
+                }
+            }
+        });
+
+        function showShopTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(`${tabName}_tab`).classList.add('active');
+            
+            // Set active tab button - find the button that was clicked
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabTexts = ['Mechs', 'Weapons', 'Equipment', 'Missions'];
+            const tabIndex = ['mechs', 'weapons', 'equipment', 'missions'].indexOf(tabName);
+            if (tabIndex !== -1) {
+                tabButtons[tabIndex].classList.add('active');
+            }
+            
+            // Load data for the selected tab
+            switch(tabName) {
+                case 'mechs':
+                    loadMechs();
+                    break;
+                case 'weapons':
+                    loadWeapons();
+                    break;
+                case 'equipment':
+                    loadEquipment();
+                    break;
+                case 'missions':
+                    loadMissions();
+                    break;
+            }
+        }
+
+        function loadMechs() {
+            fetch('/get_mech_shop')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const list = document.getElementById('mechs_list');
+                    list.innerHTML = '';
+                    
+                    data.mechs.forEach(mech => {
+                        const div = document.createElement('div');
+                        div.className = 'shop-item';
+                        
+                        // Use value from Excel if available, otherwise calculate price
+                        const price = mech.value || (mech.tonnage * 50 + mech.battle_value * 2);
+                        
+                        div.innerHTML = `
+                            <div class="item-header">
+                                <h4 class="item-name">${mech.name} ${mech.model}</h4>
+                                <div class="item-price">${price.toLocaleString()} credits</div>
+                            </div>
+                            <div class="item-details">
+                                <div class="item-detail"><strong>Tonnage:</strong> ${mech.tonnage}t</div>
+                                <div class="item-detail"><strong>Battle Value:</strong> ${mech.battle_value}</div>
+                                <div class="item-detail"><strong>Tech Base:</strong> ${mech.tech_base}</div>
+                                <div class="item-detail"><strong>Year:</strong> ${mech.introduction_year}</div>
+                                <div class="item-detail"><strong>Walk:</strong> ${mech.movement_points?.walking || 'N/A'}</div>
+                                <div class="item-detail"><strong>Run:</strong> ${mech.movement_points?.running || 'N/A'}</div>
+                            </div>
+                            <div class="item-description">
+                                Weapons: ${mech.weapons?.map(w => `${w.quantity}x ${w.type}`).join(', ') || 'None listed'}
+                            </div>
+                            <div class="item-actions">
+                                <button class="buy-btn" onclick="purchaseMech('${mech.name}')">Purchase</button>
+                            </div>
+                        `;
+                        list.appendChild(div);
+                    });
+                } else {
+                    addToOutput('Error loading mechs: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error loading mechs: ' + error);
+            });
+        }
+
+        function loadWeapons() {
+            fetch('/get_weapons_shop')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const list = document.getElementById('weapons_list');
+                    list.innerHTML = '';
+                    
+                    data.weapons.forEach(weapon => {
+                        const div = document.createElement('div');
+                        div.className = 'shop-item';
+                        
+                        div.innerHTML = `
+                            <div class="item-header">
+                                <h4 class="item-name">${weapon.name}</h4>
+                                <div class="item-price">${weapon.value} credits</div>
+                            </div>
+                            <div class="item-details">
+                                <div class="item-detail"><strong>Type:</strong> ${weapon.type}</div>
+                                <div class="item-detail"><strong>Tonnage:</strong> ${weapon.tonnage}t</div>
+                                <div class="item-detail"><strong>Slots:</strong> ${weapon.slots}</div>
+                                <div class="item-detail"><strong>Damage:</strong> ${weapon.damage}</div>
+                                <div class="item-detail"><strong>Heat:</strong> ${weapon.heat}</div>
+                                <div class="item-detail"><strong>Range:</strong> ${weapon.range_category}</div>
+                            </div>
+                            <div class="item-description">
+                                ${weapon.special_notes || 'Standard weapon system'}
+                            </div>
+                            <div class="item-actions">
+                                <button class="buy-btn" onclick="purchaseWeapon('${weapon.name}')">Purchase</button>
+                            </div>
+                        `;
+                        list.appendChild(div);
+                    });
+                } else {
+                    addToOutput('Error loading weapons: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error loading weapons: ' + error);
+            });
+        }
+
+        function loadEquipment() {
+            fetch('/get_equipment_shop')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const list = document.getElementById('equipment_list');
+                    list.innerHTML = '';
+                    
+                    data.equipment.forEach(equipment => {
+                        const div = document.createElement('div');
+                        div.className = 'shop-item';
+                        
+                        div.innerHTML = `
+                            <div class="item-header">
+                                <h4 class="item-name">${equipment.designation}</h4>
+                                <div class="item-price">${equipment.value} credits</div>
+                            </div>
+                            <div class="item-details">
+                                <div class="item-detail"><strong>Type:</strong> ${equipment.type}</div>
+                                <div class="item-detail"><strong>Tonnage:</strong> ${equipment.tonnage}t</div>
+                                <div class="item-detail"><strong>Slots:</strong> ${equipment.slots}</div>
+                                <div class="item-detail"><strong>Manufacturer:</strong> ${equipment.manufacturer}</div>
+                                <div class="item-detail"><strong>Model:</strong> ${equipment.model}</div>
+                                <div class="item-detail"></div>
+                            </div>
+                            <div class="item-description">
+                                ${equipment.extras}
+                            </div>
+                            <div class="item-actions">
+                                <button class="buy-btn" onclick="purchaseEquipment('${equipment.designation}')">Purchase</button>
+                            </div>
+                        `;
+                        list.appendChild(div);
+                    });
+                } else {
+                    addToOutput('Error loading equipment: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error loading equipment: ' + error);
+            });
+        }
+
+        function purchaseMech(mechName) {
+            fetch('/purchase_mech', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mech_name: mechName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentPlayer = data.player;
+                    addToOutput(data.message);
+                    showPlayerInfo();
+                    hideShopModal();
+                } else {
+                    addToOutput('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error purchasing mech: ' + error);
+            });
+        }
+
+        function purchaseWeapon(weaponName) {
+            // TODO: Implement weapon purchase logic
+            addToOutput(`Weapon purchasing not yet implemented for ${weaponName}`);
+        }
+
+        function purchaseEquipment(equipmentName) {
+            // TODO: Implement equipment purchase logic
+            addToOutput(`Equipment purchasing not yet implemented for ${equipmentName}`);
+        }
+
+        function loadMissions() {
+            fetch('/get_available_missions')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const list = document.getElementById('missions_list');
+                    list.innerHTML = '';
+                    
+                    if (data.missions.length === 0) {
+                        list.innerHTML = '<div class="shop-item"><div class="item-description">No missions available at your current level.</div></div>';
+                        return;
+                    }
+                    
+                    data.missions.forEach(mission => {
+                        const div = document.createElement('div');
+                        div.className = 'shop-item';
+                        
+                        const difficulty = mission.difficulty || 'unknown';
+                        const difficultyColor = {
+                            'easy': '#4CAF50',
+                            'medium': '#FF9800',
+                            'hard': '#F44336',
+                            'extreme': '#9C27B0'
+                        }[difficulty] || '#666';
+                        
+                        div.innerHTML = `
+                            <div class="item-header">
+                                <h4 class="item-name">${mission.name}</h4>
+                                <div class="item-price" style="color: ${difficultyColor};">${difficulty.toUpperCase()}</div>
+                            </div>
+                            <div class="item-details">
+                                <div class="item-detail"><strong>Reward:</strong> ${mission.scaled_reward_credits?.toLocaleString()} credits</div>
+                                <div class="item-detail"><strong>Experience:</strong> ${mission.scaled_reward_experience?.toLocaleString()} XP</div>
+                                <div class="item-detail"><strong>Duration:</strong> ${mission.duration} turns</div>
+                                <div class="item-detail"><strong>Min Level:</strong> ${mission.requirements?.min_level || 1}</div>
+                                <div class="item-detail"><strong>Mechs Required:</strong> ${mission.requirements?.mechs_required || 0}</div>
+                                <div class="item-detail"><strong>Risk:</strong> ${Math.round((mission.risk_level || 0) * 100)}%</div>
+                            </div>
+                            <div class="item-description">
+                                ${mission.description}
+                            </div>
+                            <div class="item-actions">
+                                <button class="buy-btn" onclick="startMission('${mission.id}')">Start Mission</button>
+                            </div>
+                        `;
+                        list.appendChild(div);
+                    });
+                } else {
+                    addToOutput('Error loading missions: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error loading missions: ' + error);
+            });
+        }
+
+        function startMission(missionId) {
+            if (confirm('Are you sure you want to start this mission? This will consume time and may result in mech damage.')) {
+                fetch('/start_mission', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        mission_id: missionId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        currentPlayer = data.player;
+                        addToOutput(data.message);
+                        showPlayerInfo();
+                        hideShopModal();
+                        
+                        if (data.leveled_up) {
+                            addToOutput(`🎉 Congratulations! You leveled up to level ${data.player.level}!`);
+                        }
+                    } else {
+                        addToOutput('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    addToOutput('Error starting mission: ' + error);
+                });
+            }
+        }
+
+        // Hangar Modal Functions
+        function showHangarModal() {
+            document.getElementById('hangar_modal').classList.remove('hidden');
+            showHangarTab('overview'); // Default to overview tab
+            loadHangarData();
+        }
+
+        function hideHangarModal() {
+            document.getElementById('hangar_modal').classList.add('hidden');
+        }
+
+        function showHangarTab(tabName) {
+            // Hide all hangar tabs
+            document.querySelectorAll('#hangar_modal .tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all hangar tab buttons
+            document.querySelectorAll('#hangar_modal .tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(`hangar_${tabName}_tab`).classList.add('active');
+            
+            // Set active tab button
+            const tabButtons = document.querySelectorAll('#hangar_modal .tab-btn');
+            const tabIndex = ['overview', 'mechs', 'vehicles', 'upgrades'].indexOf(tabName);
+            if (tabIndex !== -1) {
+                tabButtons[tabIndex].classList.add('active');
+            }
+            
+            // Load data for the selected tab
+            switch(tabName) {
+                case 'overview':
+                    updateHangarOverview();
+                    break;
+                case 'mechs':
+                    loadHangarMechs();
+                    break;
+                case 'vehicles':
+                    loadHangarVehicles();
+                    break;
+                case 'upgrades':
+                    // Upgrades content is static for now
+                    break;
+            }
+        }
+
+        function loadHangarData() {
+            fetch('/get_hangar')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.currentHangarData = data.hangar;
+                    updateHangarOverview();
+                } else {
+                    addToOutput('Error loading hangar: ' + data.message);
+                }
+            })
+            .catch(error => {
+                addToOutput('Error loading hangar: ' + error);
+            });
+        }
+
+        function updateHangarOverview() {
+            if (!window.currentHangarData) return;
+            
+            const stats = window.currentHangarData.stats;
+            
+            document.getElementById('mech_count').textContent = `${stats.operational_mechs}/${stats.total_mechs}`;
+            document.getElementById('vehicle_count').textContent = `${stats.operational_vehicles}/${stats.total_vehicles}`;
+            document.getElementById('hangar_value').textContent = stats.total_value.toLocaleString();
+            document.getElementById('repair_costs').textContent = stats.total_repair_cost.toLocaleString();
+            
+            // Update repair all button
+            const repairBtn = document.querySelector('.repair-all-btn');
+            if (stats.total_repair_cost > 0 && currentPlayer.credits >= stats.total_repair_cost) {
+                repairBtn.disabled = false;
+                repairBtn.textContent = `Repair All (${stats.total_repair_cost.toLocaleString()} credits)`;
+            } else if (stats.total_repair_cost > 0) {
+                repairBtn.disabled = true;
+                repairBtn.textContent = `Repair All (${stats.total_repair_cost.toLocaleString()} credits) - Insufficient Credits`;
+            } else {
+                repairBtn.disabled = true;
+                repairBtn.textContent = 'All Units Operational';
+            }
+        }
+
+        function loadHangarMechs() {
+            if (!window.currentHangarData) {
+                loadHangarData();
+                return;
+            }
+            
+            const list = document.getElementById('hangar_mechs_list');
+            list.innerHTML = '';
+            
+            const mechs = window.currentHangarData.mechs;
+            
+            if (mechs.length === 0) {
+                list.innerHTML = '<div class="unit-card"><div class="unit-name">No BattleMechs in hangar</div><p>Visit the Mech Shop to purchase your first BattleMech!</p></div>';
+                return;
+            }
+            
+            mechs.forEach(mech => {
+                const div = document.createElement('div');
+                div.className = 'unit-card';
+                
+                const status = getUnitStatus(mech.armor_condition, mech.internal_condition, true);
+                const template = mech.template;
+                
+                div.innerHTML = `
+                    <div class="unit-header">
+                        <h4 class="unit-name">${mech.display_name}</h4>
+                        <div class="unit-status ${status.class}">${status.text}</div>
+                    </div>
+                    <div class="unit-condition">
+                        <div>Armor Condition: ${Math.round(mech.armor_condition * 100)}%</div>
+                        <div class="condition-bar">
+                            <div class="condition-fill armor" style="width: ${mech.armor_condition * 100}%"></div>
+                        </div>
+                        <div style="margin-top: 8px;">Internal Structure: ${Math.round(mech.internal_condition * 100)}%</div>
+                        <div class="condition-bar">
+                            <div class="condition-fill internal" style="width: ${mech.internal_condition * 100}%"></div>
+                        </div>
+                    </div>
+                    <div class="unit-specs">
+                        <div class="unit-spec"><strong>Model:</strong> ${template.model}</div>
+                        <div class="unit-spec"><strong>Tonnage:</strong> ${template.tonnage}t</div>
+                        <div class="unit-spec"><strong>Battle Value:</strong> ${template.battle_value}</div>
+                        <div class="unit-spec"><strong>Value:</strong> ${template.price.toLocaleString()}</div>
+                        <div class="unit-spec"><strong>Repair Cost:</strong> ${mech.repair_cost.toLocaleString()}</div>
+                        <div class="unit-spec"><strong>Purchased:</strong> ${new Date(mech.purchased_at).toLocaleDateString()}</div>
+                    </div>
+                    <div class="unit-actions">
+                        <button class="unit-btn repair" onclick="repairUnit('mech', ${mech.id})" ${mech.repair_cost === 0 ? 'disabled' : ''}>
+                            Repair (${mech.repair_cost.toLocaleString()})
+                        </button>
+                        <button class="unit-btn rename" onclick="renameUnit('mech', ${mech.id}, '${mech.display_name}')">
+                            Rename
+                        </button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function loadHangarVehicles() {
+            if (!window.currentHangarData) {
+                loadHangarData();
+                return;
+            }
+            
+            const list = document.getElementById('hangar_vehicles_list');
+            list.innerHTML = '';
+            
+            const vehicles = window.currentHangarData.vehicles;
+            
+            if (vehicles.length === 0) {
+                list.innerHTML = '<div class="unit-card"><div class="unit-name">No Vehicles in hangar</div><p>Vehicle purchasing coming soon!</p></div>';
+                return;
+            }
+            
+            vehicles.forEach(vehicle => {
+                const div = document.createElement('div');
+                div.className = 'unit-card';
+                
+                const status = getUnitStatus(vehicle.condition, 1.0, false);
+                const template = vehicle.template;
+                
+                div.innerHTML = `
+                    <div class="unit-header">
+                        <h4 class="unit-name">${vehicle.display_name}</h4>
+                        <div class="unit-status ${status.class}">${status.text}</div>
+                    </div>
+                    <div class="unit-condition">
+                        <div>Condition: ${Math.round(vehicle.condition * 100)}%</div>
+                        <div class="condition-bar">
+                            <div class="condition-fill vehicle" style="width: ${vehicle.condition * 100}%"></div>
+                        </div>
+                    </div>
+                    <div class="unit-specs">
+                        <div class="unit-spec"><strong>Type:</strong> ${template.vehicle_type}</div>
+                        <div class="unit-spec"><strong>Tonnage:</strong> ${template.tonnage}t</div>
+                        <div class="unit-spec"><strong>Battle Value:</strong> ${template.battle_value}</div>
+                        <div class="unit-spec"><strong>Value:</strong> ${template.price.toLocaleString()}</div>
+                        <div class="unit-spec"><strong>Repair Cost:</strong> ${vehicle.repair_cost.toLocaleString()}</div>
+                        <div class="unit-spec"><strong>Purchased:</strong> ${new Date(vehicle.purchased_at).toLocaleDateString()}</div>
+                    </div>
+                    <div class="unit-actions">
+                        <button class="unit-btn repair" onclick="repairUnit('vehicle', ${vehicle.id})" ${vehicle.repair_cost === 0 ? 'disabled' : ''}>
+                            Repair (${vehicle.repair_cost.toLocaleString()})
+                        </button>
+                        <button class="unit-btn rename" onclick="renameUnit('vehicle', ${vehicle.id}, '${vehicle.display_name}')">
+                            Rename
+                        </button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function getUnitStatus(armorCondition, internalCondition, isMech) {
+            if (isMech) {
+                if (internalCondition <= 0) {
+                    return { class: 'destroyed', text: 'Destroyed' };
+                } else if (armorCondition < 0.5 || internalCondition < 0.8) {
+                    return { class: 'damaged', text: 'Damaged' };
+                } else {
+                    return { class: 'operational', text: 'Operational' };
+                }
+            } else {
+                if (armorCondition <= 0.2) {
+                    return { class: 'destroyed', text: 'Destroyed' };
+                } else if (armorCondition < 0.7) {
+                    return { class: 'damaged', text: 'Damaged' };
+                } else {
+                    return { class: 'operational', text: 'Operational' };
+                }
+            }
+        }
+
+        function repairUnit(unitType, unitId) {
+            if (confirm('Repair this unit? This will spend credits based on the damage level.')) {
+                fetch('/repair_unit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        unit_type: unitType,
+                        unit_id: unitId,
+                        repair_amount: 1.0
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        currentPlayer = data.player;
+                        addToOutput(data.message);
+                        showPlayerInfo();
+                        loadHangarData(); // Refresh hangar data
+                    } else {
+                        addToOutput('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    addToOutput('Error repairing unit: ' + error);
+                });
+            }
+        }
+
+        function renameUnit(unitType, unitId, currentName) {
+            const newName = prompt(`Enter new name for "${currentName}":`, currentName);
+            if (newName && newName.trim() && newName.trim() !== currentName) {
+                fetch('/rename_unit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        unit_type: unitType,
+                        unit_id: unitId,
+                        new_name: newName.trim()
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        addToOutput(data.message);
+                        loadHangarData(); // Refresh hangar data
+                    } else {
+                        addToOutput('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    addToOutput('Error renaming unit: ' + error);
+                });
+            }
+        }
+
+        function repairAllUnits() {
+            if (!window.currentHangarData) return;
+            
+            const totalCost = window.currentHangarData.stats.total_repair_cost;
+            if (totalCost === 0) {
+                addToOutput('All units are already operational.');
+                return;
+            }
+            
+            if (confirm(`Repair all damaged units for ${totalCost.toLocaleString()} credits?`)) {
+                const repairPromises = [];
+                
+                // Repair all mechs
+                window.currentHangarData.mechs.forEach(mech => {
+                    if (mech.repair_cost > 0) {
+                        repairPromises.push(
+                            fetch('/repair_unit', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    unit_type: 'mech',
+                                    unit_id: mech.id,
+                                    repair_amount: 1.0
+                                })
+                            })
+                        );
+                    }
+                });
+                
+                // Repair all vehicles
+                window.currentHangarData.vehicles.forEach(vehicle => {
+                    if (vehicle.repair_cost > 0) {
+                        repairPromises.push(
+                            fetch('/repair_unit', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    unit_type: 'vehicle',
+                                    unit_id: vehicle.id,
+                                    repair_amount: 1.0
+                                })
+                            })
+                        );
+                    }
+                });
+                
+                Promise.all(repairPromises)
+                .then(() => {
+                    addToOutput(`All units repaired for ${totalCost.toLocaleString()} credits.`);
+                    loadHangarData();
+                    // Update player info to reflect credit changes
+                    fetch('/get_player_info')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            currentPlayer = data.player;
+                            showPlayerInfo();
+                        }
+                    });
+                })
+                .catch(error => {
+                    addToOutput('Error during mass repair: ' + error);
+                    loadHangarData();
+                });
+            }
+        }
+
+        // Map interaction functions
+        function startDragging(e) {
+            if (e.button === 0) {
+                isDragging = true;
+                startDragX = e.clientX - mapOffsetX;
+                startDragY = e.clientY - mapOffsetY;
+                document.getElementById('map_canvas').style.cursor = 'grabbing';
+            }
+        }
+
+        function stopDragging() {
+            isDragging = false;
+            lastMapOffsetX = mapOffsetX;
+            lastMapOffsetY = mapOffsetY;
+            document.getElementById('map_canvas').style.cursor = 'grab';
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            
+            mapOffsetX = e.clientX - startDragX;
+            mapOffsetY = e.clientY - startDragY;
+            
+            drawMap(currentMapData, mapOffsetX, mapOffsetY);
+            hideTooltip();
+        }
+
+        function showTooltip(event) {
+            if (!currentMapData || isDragging) return;
+            
+            const tooltip = document.getElementById('tooltip');
+            const { row, col } = getHexagonCoordinates(event.clientX, event.clientY);
+            const cell = currentMapData[row][col];
+            
+            const terrainName = cell.terrain_type
+                .split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            
+            let tooltipContent = `
+                Terrain: ${terrainName}<br>
+                Coordinates: (${col}, ${row})<br>
+            `;
+            
+            if (currentPlayer && currentPlayer.active_mech) {
+                const moveCost = calculateMovementCost(col, row);
+                const canMove = moveCost <= currentPlayer.movement_points_remaining;
+                const costColor = canMove ? '#4CAF50' : '#F44336';
+                
+                tooltipContent += `
+                    Movement Cost: <span style="color: ${costColor}">${moveCost.toFixed(1)} MP</span><br>
+                    ${canMove ? 'Click to move here' : 'Insufficient movement points'}
+                `;
+            } else {
+                tooltipContent += 'Select a mech to move';
+            }
+            
+            tooltip.innerHTML = tooltipContent;
+            tooltip.style.display = 'block';
+            
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const mapContainer = document.getElementById('map_container');
+            const containerRect = mapContainer.getBoundingClientRect();
+            
+            let left = event.clientX - containerRect.left + 10;
+            let top = event.clientY - containerRect.top + 10;
+            
+            if (left + tooltipRect.width > containerRect.width) {
+                left = event.clientX - containerRect.left - tooltipRect.width - 10;
+            }
+            if (top + tooltipRect.height > containerRect.height) {
+                top = event.clientY - containerRect.top - tooltipRect.height - 10;
+            }
+            
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').style.display = 'none';
+        }
+
+        function handleMapClick(event) {
+            if (!currentPlayer || isDragging) return;
+            
+            const { row, col } = getHexagonCoordinates(event.clientX, event.clientY);
+            movePlayer(col, row);
+        }
+
+        function generateNewMap() {
+            const loadingSpinner = document.getElementById('loading');
+            const generateButton = document.querySelector('button');
+            
+            loadingSpinner.style.display = 'block';
+            generateButton.disabled = true;
+            
+            mapOffsetX = 0;
+            mapOffsetY = 0;
+            lastMapOffsetX = 0;
+            lastMapOffsetY = 0;
+            
+            fetch('/generate_map')
+                .then(response => response.json())
+                .then(mapData => {
+                    drawMap(mapData, mapOffsetX, mapOffsetY);
+                    loadingSpinner.style.display = 'none';
+                    generateButton.disabled = false;
+                    addToOutput('New map generated.');
+                })
+                .catch(error => {
+                    console.error('Error generating map:', error);
+                    loadingSpinner.style.display = 'none';
+                    generateButton.disabled = false;
+                    addToOutput('Error generating map.');
+                });
+        }
+
+        // Dropdown Menu Functions
+        let debugMessages = false;
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown-menu');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function showNewCharacter() {
+            toggleDropdown();
+            addToOutput('Starting new character creation...');
+            
+            // Reset player data
+            currentPlayer = null;
+            // Hide other panels
+            document.getElementById('player_info').style.display = 'none';
+            document.getElementById('encounter_panel').classList.add('hidden');
+            document.getElementById('shop_modal').classList.add('hidden');
+            document.getElementById('player_marker').classList.add('hidden');
+            
+            // Recreate character creation section
+            recreateCharacterSection();
+            
+            // Reset character form
+            document.getElementById('char_name').value = '';
+            document.getElementById('gunnery').value = '8';
+            document.getElementById('piloting').value = '8';
+            document.getElementById('guts').value = '8';
+            document.getElementById('tactics').value = '8';
+            updatePointsRemaining();
+        }
+
+        function showLoadCharacter() {
+            toggleDropdown();
+            addToOutput('Load character functionality not yet implemented.');
+            // TODO: Implement load character functionality
+        }
+
+        function openMechShop() {
+            toggleDropdown();
+            if (currentPlayer) {
+                showShopModal();
+            } else {
+                addToOutput('Please create or load a character first.');
+            }
+        }
+
+        function openHangar() {
+            toggleDropdown();
+            if (currentPlayer) {
+                showHangarModal();
+            } else {
+                addToOutput('Please create or load a character first.');
+            }
+        }
+
+        function showSettings() {
+            toggleDropdown();
+            addToOutput('Settings panel not yet implemented.');
+            // TODO: Implement settings panel
+        }
+
+        function toggleDebugMessages() {
+            toggleDropdown();
+            debugMessages = !debugMessages;
+            const debugToggleText = document.getElementById('debug-toggle-text');
+            debugToggleText.textContent = debugMessages ? 'Debug Messages: ON' : 'Debug Messages: OFF';
+            
+            if (debugMessages) {
+                addToOutput('Debug messages enabled.');
+            } else {
+                addToOutput('Debug messages disabled.');
+            }
+        }
+
+        function showAbout() {
+            toggleDropdown();
+            addToOutput('=== BattleTech MUD ===');
+            addToOutput('A text-based MUD game set in the BattleTech universe.');
+            addToOutput('Navigate the battlefield, pilot mighty BattleMechs, and forge your destiny.');
+            addToOutput('Version: 1.0.0');
+        }
+
+        function logout() {
+            toggleDropdown();
+            if (confirm('Are you sure you want to logout?')) {
+                addToOutput('Logging out...');
+                // Reset player data
+                currentPlayer = null;
+                // Hide player info
+                document.getElementById('player_info').style.display = 'none';
+                // Hide other panels
+                document.getElementById('encounter_panel').classList.add('hidden');
+                document.getElementById('shop_modal').classList.add('hidden');
+                document.getElementById('player_marker').classList.add('hidden');
+                // Recreate character creation section
+                recreateCharacterSection();
+                addToOutput('Logged out successfully.');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdown-menu');
+            const dropdownBtn = document.querySelector('.dropdown-btn');
+            
+            if (!dropdown.contains(event.target) && !dropdownBtn.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Event listeners
+        window.onload = function() {
+            const canvas = document.getElementById('map_canvas');
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    drag(e);
+                } else {
+                    showTooltip(e);
+                }
+            });
+            
+            canvas.addEventListener('mouseleave', () => {
+                hideTooltip();
+                stopDragging();
+            });
+            
+            canvas.addEventListener('mousedown', startDragging);
+            canvas.addEventListener('mouseup', stopDragging);
+            canvas.addEventListener('click', handleMapClick);
+            
+            generateNewMap();
+        };
+    </script>
+</body>
+</html> 

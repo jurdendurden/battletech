@@ -1,0 +1,627 @@
+{
+  "equipment": [
+    {
+      "designation": "Arm Mod",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 1,
+      "value": 20000,
+      "manufacturer": "Coventry",
+      "model": "X55 Standard",
+      "extras": "+5 Melee Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod+",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 1,
+      "value": 40000,
+      "manufacturer": "Coventry",
+      "model": "X65 Standard",
+      "extras": "+10 Melee Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod++",
+      "type": "Equipment",
+      "tonnage": 4.0,
+      "slots": 2,
+      "value": 60000,
+      "manufacturer": "Coventry",
+      "model": "X75 Standard",
+      "extras": "+15 Melee Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod",
+      "type": "Equipment",
+      "tonnage": 4.0,
+      "slots": 2,
+      "value": 80000,
+      "manufacturer": "Coventry",
+      "model": "B20 Extended",
+      "extras": "+20 Melee Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod+",
+      "type": "Equipment",
+      "tonnage": 6.0,
+      "slots": 3,
+      "value": 160000,
+      "manufacturer": "Coventry",
+      "model": "B40 Extended",
+      "extras": "+40 Melee Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod++",
+      "type": "Equipment",
+      "tonnage": 6.0,
+      "slots": 3,
+      "value": 240000,
+      "manufacturer": "Coventry",
+      "model": "B60 Extended",
+      "extras": "+60 Melee Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 1,
+      "value": 30000,
+      "manufacturer": "Friedhof",
+      "model": "Thesues",
+      "extras": "+10 Melee Stability Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod+",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 1,
+      "value": 60000,
+      "manufacturer": "Friedhof",
+      "model": "Perseus",
+      "extras": "+20 Melee Stability Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod++",
+      "type": "Equipment",
+      "tonnage": 4.0,
+      "slots": 2,
+      "value": 90000,
+      "manufacturer": "Friedhof",
+      "model": "Heracles",
+      "extras": "+30 Melee Stability Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod",
+      "type": "Equipment",
+      "tonnage": 4.0,
+      "slots": 2,
+      "value": 120000,
+      "manufacturer": "Friedhof",
+      "model": "Behemoth",
+      "extras": "+40 Melee Stability Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod+",
+      "type": "Equipment",
+      "tonnage": 6.0,
+      "slots": 3,
+      "value": 150000,
+      "manufacturer": "Friedhof",
+      "model": "Gargantuan",
+      "extras": "+50 Melee Stability Damage, Arms only"
+    },
+    {
+      "designation": "Arm Mod++",
+      "type": "Equipment",
+      "tonnage": 6.0,
+      "slots": 3,
+      "value": 180000,
+      "manufacturer": "Friedhof",
+      "model": "Colossus",
+      "extras": "+60 Melee Stability Damage, Arms only"
+    },
+    {
+      "designation": "Cockpit Mod",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 150000,
+      "manufacturer": "Ceres Metals",
+      "model": "Braced",
+      "extras": "+1 injury resist, Head only"
+    },
+    {
+      "designation": "Cockpit Mod+",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 210000,
+      "manufacturer": "Ceres Metals",
+      "model": "Reinforced",
+      "extras": "+2 injury resist, Head only"
+    },
+    {
+      "designation": "Cockpit Mod++",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 320000,
+      "manufacturer": "Ceres Metals",
+      "model": "Hardened",
+      "extras": "+3 injury resist, Head only"
+    },
+    {
+      "designation": "Rangefinder",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 70000,
+      "manufacturer": "Majesty M M",
+      "model": "60KL",
+      "extras": "+25m View Distance, Head only"
+    },
+    {
+      "designation": "Rangefinder+",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 130000,
+      "manufacturer": "Majesty M M",
+      "model": "120KL",
+      "extras": "+50m View Distance, Head only"
+    },
+    {
+      "designation": "Rangefinder++",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 260000,
+      "manufacturer": "Majesty M M",
+      "model": "180KL",
+      "extras": "+100m View Distance, Head only"
+    },
+    {
+      "designation": "Comms System",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 160000,
+      "manufacturer": "StarCorps",
+      "model": "Improved",
+      "extras": "+1 Morale, Head only"
+    },
+    {
+      "designation": "Comms System+",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 320000,
+      "manufacturer": "StarCorps",
+      "model": "Enhanced",
+      "extras": "+2 Morale, Head only"
+    },
+    {
+      "designation": "Comms System++",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 470000,
+      "manufacturer": "StarCorps",
+      "model": "Advanced",
+      "extras": "+3 Morale, Head only"
+    },
+    {
+      "designation": "Leg Mod",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 3,
+      "value": 30000,
+      "manufacturer": "Rawlings",
+      "model": "Epsilon",
+      "extras": "+5 DFA Damage, legs only"
+    },
+    {
+      "designation": "Leg Mod+",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 3,
+      "value": 60000,
+      "manufacturer": "Rawlings",
+      "model": "Omicron",
+      "extras": "+10 DFA Damage, legs only"
+    },
+    {
+      "designation": "Leg Mod++",
+      "type": "Equipment",
+      "tonnage": 3.0,
+      "slots": 3,
+      "value": 90000,
+      "manufacturer": "Rawlings",
+      "model": "Omega",
+      "extras": "+15 DFA Damage, legs only"
+    },
+    {
+      "designation": "Leg Mod",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 3,
+      "value": 20000,
+      "manufacturer": "Pitban",
+      "model": "Jackrabbit",
+      "extras": "-10 DFA Self Damage, legs only"
+    },
+    {
+      "designation": "Leg Mod+",
+      "type": "Equipment",
+      "tonnage": 4.0,
+      "slots": 3,
+      "value": 30000,
+      "manufacturer": "Pitban",
+      "model": "Wallaby",
+      "extras": "-20 DFA Self Damage, legs only"
+    },
+    {
+      "designation": "Leg Mod++",
+      "type": "Equipment",
+      "tonnage": 6.0,
+      "slots": 3,
+      "value": 50000,
+      "manufacturer": "Pitban",
+      "model": "Kangaroo",
+      "extras": "-30 DFA Self Damage, legs only"
+    },
+    {
+      "designation": "Gyro",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 3,
+      "value": 300000,
+      "manufacturer": "Rawlings",
+      "model": "StabiliTrak 5",
+      "extras": "-10% Stability Damage Taken, CT only"
+    },
+    {
+      "designation": "Gyro+",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 3,
+      "value": 800000,
+      "manufacturer": "Rawlings",
+      "model": "StabiliTrak 10",
+      "extras": "-20% Stability Damage Taken, CT only"
+    },
+    {
+      "designation": "Gyro++",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 3,
+      "value": 1500000,
+      "manufacturer": "Rawlings",
+      "model": "StabiliTrak 15",
+      "extras": "-30% Stability Damage Taken, CT only"
+    },
+    {
+      "designation": "Gyro",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 3,
+      "value": 200000,
+      "manufacturer": "Friedhof",
+      "model": "Osprey",
+      "extras": "+1 Hit Defense, CT only"
+    },
+    {
+      "designation": "Gyro+",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 3,
+      "value": 1200000,
+      "manufacturer": "Friedhof",
+      "model": "Kite",
+      "extras": "+2 Hit Defense, CT only"
+    },
+    {
+      "designation": "Gyro++",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 3,
+      "value": 2400000,
+      "manufacturer": "Friedhof",
+      "model": "Sparrow",
+      "extras": "+3 Hit Defense, CT only"
+    },
+    {
+      "designation": "Gyro",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 3,
+      "value": 20000,
+      "manufacturer": "Coventry",
+      "model": "Mark 75",
+      "extras": "+1 Melee Hit, CT only"
+    },
+    {
+      "designation": "Gyro+",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 3,
+      "value": 160000,
+      "manufacturer": "Coventry",
+      "model": "Mark 85",
+      "extras": "+2 Melee Hit, CT only"
+    },
+    {
+      "designation": "Gyro++",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 3,
+      "value": 590000,
+      "manufacturer": "Coventry",
+      "model": "Mark 95",
+      "extras": "+3 Melee Hit, CT only"
+    },
+    {
+      "designation": "TTS",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 2,
+      "value": 350000,
+      "manufacturer": "Hartford",
+      "model": "F1800",
+      "extras": "+1 Accuracy Missile Weapons"
+    },
+    {
+      "designation": "TTS+",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 2,
+      "value": 700000,
+      "manufacturer": "Hartford",
+      "model": "F2400",
+      "extras": "+2 Accuracy Missile Weapons"
+    },
+    {
+      "designation": "TTS++",
+      "type": "Equipment",
+      "tonnage": 3.0,
+      "slots": 2,
+      "value": 1030000,
+      "manufacturer": "Hartford",
+      "model": "F3000",
+      "extras": "+3 Accuracy Missile Weapons"
+    },
+    {
+      "designation": "TTS",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 2,
+      "value": 530000,
+      "manufacturer": "Kallon",
+      "model": "A-C 1000",
+      "extras": "+1 Accuracy Ballistic Weapons"
+    },
+    {
+      "designation": "TTS+",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 2,
+      "value": 1050000,
+      "manufacturer": "Kallon",
+      "model": "A-C 1500",
+      "extras": "+2 Accuracy Ballistic Weapons"
+    },
+    {
+      "designation": "TTS++",
+      "type": "Equipment",
+      "tonnage": 3.0,
+      "slots": 2,
+      "value": 1540000,
+      "manufacturer": "Kallon",
+      "model": "A-C P150+",
+      "extras": "+3 Accuracy Ballistic Weapons"
+    },
+    {
+      "designation": "TTS",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 2,
+      "value": 420000,
+      "manufacturer": "RCA",
+      "model": "InstaTrac VII",
+      "extras": "+1 Accuracy Energy Weapons"
+    },
+    {
+      "designation": "TTS+",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 2,
+      "value": 840000,
+      "manufacturer": "RCA",
+      "model": "InstaTrac IX",
+      "extras": "+2 Accuracy Energy Weapons"
+    },
+    {
+      "designation": "TTS++",
+      "type": "Equipment",
+      "tonnage": 3.0,
+      "slots": 2,
+      "value": 1230000,
+      "manufacturer": "RCA",
+      "model": "InstaTrac X",
+      "extras": "+3 Accuracy Energy Weapons"
+    },
+    {
+      "designation": "Jump Jet (S)",
+      "type": "Equipment",
+      "tonnage": 0.5,
+      "slots": 1,
+      "value": 30000,
+      "manufacturer": "Generic",
+      "model": "Standard",
+      "extras": "Allows Lt & Med Mechs to Jump - More jets = farther"
+    },
+    {
+      "designation": "Jump Jet (H)",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 1,
+      "value": 60000,
+      "manufacturer": "Generic",
+      "model": "Heavy",
+      "extras": "Allows Heavy Mechs to Jump - More jets = farther"
+    },
+    {
+      "designation": "Jump Jet (A)",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 1,
+      "value": 70000,
+      "manufacturer": "Generic",
+      "model": "Assault",
+      "extras": "Allows Assault Mechs to Jump - More jets = farther"
+    },
+    {
+      "designation": "Heat Sink",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 1,
+      "value": 30000,
+      "manufacturer": "Generic",
+      "model": "",
+      "extras": "-3 Heat / Turn"
+    },
+    {
+      "designation": "Heat Sink (D)",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 3,
+      "value": 630000,
+      "manufacturer": "Generic",
+      "model": "",
+      "extras": "-6 Heat / Turn"
+    },
+    {
+      "designation": "Heat Bank",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 2,
+      "value": 160000,
+      "manufacturer": "Generic",
+      "model": "Standard Bank",
+      "extras": "+10 Max Heat and +5 Overheat Threshold"
+    },
+    {
+      "designation": "Heat Bank+",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 4,
+      "value": 320000,
+      "manufacturer": "Generic",
+      "model": "Improved Bank",
+      "extras": "+20 Max Heat and +10 Overheat Threshold"
+    },
+    {
+      "designation": "Heat Bank++",
+      "type": "Equipment",
+      "tonnage": 1.0,
+      "slots": 6,
+      "value": 470000,
+      "manufacturer": "Generic",
+      "model": "Bulk Bank",
+      "extras": "+30 Max Heat and +15 Overheat Threshold"
+    },
+    {
+      "designation": "Thermal Exchanger",
+      "type": "Equipment",
+      "tonnage": 2.0,
+      "slots": 1,
+      "value": 360000,
+      "manufacturer": "Generic",
+      "model": "Thermal Exchanger I",
+      "extras": "-10% weapon heat"
+    },
+    {
+      "designation": "Thermal Exchanger",
+      "type": "Equipment",
+      "tonnage": 3.0,
+      "slots": 1,
+      "value": 540000,
+      "manufacturer": "Generic",
+      "model": "Thermal Exchanger I",
+      "extras": "-15% weapon heat"
+    },
+    {
+      "designation": "Thermal Exchanger",
+      "type": "Equipment",
+      "tonnage": 4.0,
+      "slots": 1,
+      "value": 720000,
+      "manufacturer": "Generic",
+      "model": "Thermal Exchanger I",
+      "extras": "-20% weapon heat"
+    },
+    {
+      "designation": "Battle Computer",
+      "type": "Equipment",
+      "tonnage": 0.0,
+      "slots": 1,
+      "value": 940000,
+      "manufacturer": "Tacticon",
+      "model": "B-2000",
+      "extras": "+1 Initiative for all Lance units"
+    },
+    {
+      "designation": "Hatchet",
+      "type": "Equipment",
+      "tonnage": 3.0,
+      "slots": 3,
+      "value": 480000,
+      "manufacturer": "Coventry",
+      "model": "Starblade",
+      "extras": "+70 Melee Damage, Arms only"
+    },
+    {
+      "designation": "ECM",
+      "type": "Equipment",
+      "tonnage": 6.0,
+      "slots": 4,
+      "value": 8000000,
+      "manufacturer": "Ceres Arms",
+      "model": "Gen 1 ECM",
+      "extras": "For all friendlies in range: +4 defense against missiles, immune to indirect fire, +1 Stealth Charge/turn gained (cannot be targeted unless firing, using an active ability, or Sensor Locked, unless Enemy present within ECM field. For all Enemies in range: -1 Stealth Charge/turn."
+    },
+    {
+      "designation": "Active Probe",
+      "type": "Equipment",
+      "tonnage": 6.0,
+      "slots": 4,
+      "value": 8000000,
+      "manufacturer": "Ceres Arms",
+      "model": "Gen 1 Probe",
+      "extras": "AoE Sensor Lock, has cooldown"
+    },
+    {
+      "designation": "EWE",
+      "type": "Equipment",
+      "tonnage": 7.5,
+      "slots": 4,
+      "value": 2000000,
+      "manufacturer": "Ceres Arms",
+      "model": "Gen 1 EWE",
+      "extras": "Combines AP/ECM functionality"
+    }
+  ],
+  "total_count": 61,
+  "source": "Battletech.xlsx - Equipment sheet",
+  "extracted_from": "Row 4 headers (A4:H4)",
+  "headers": [
+    "Designation",
+    "Type",
+    "Tonnage",
+    "Slots",
+    "Value",
+    "Manufacturer",
+    "Model",
+    "Extras"
+  ]
+}

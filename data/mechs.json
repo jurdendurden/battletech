@@ -1,0 +1,2339 @@
+{
+    "mechs": [
+        {
+            "name": "Locust",
+            "model": "LCT-1V",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2499,
+            "tonnage": 20,
+            "battle_value": 427,
+            "engine_type": "Fusion",
+            "engine_model": "GM 160",
+            "core_size": 160,
+            "movement_points": {
+                "walking": 8,
+                "running": 12,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 6,
+                "center_torso": 6,
+                "right_torso": 6,
+                "left_torso": 6,
+                "right_arm": 4,
+                "left_arm": 4,
+                "right_leg": 6,
+                "left_leg": 6
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Center Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Machine Gun",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Machine Gun",
+                    "location": "Left Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 1890000
+        },
+        {
+            "name": "Phoenix Hawk",
+            "model": "PXH-1",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2568,
+            "tonnage": 45,
+            "battle_value": 1042,
+            "engine_type": "Fusion",
+            "engine_model": "Core Tek 275",
+            "core_size": 270,
+            "movement_points": {
+                "walking": 6,
+                "running": 9,
+                "jumping": 6
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 16,
+                "right_torso": 14,
+                "left_torso": 14,
+                "right_arm": 14,
+                "left_arm": 14,
+                "right_leg": 22,
+                "left_leg": 22
+            },
+            "weapons": [
+                {
+                    "type": "Large Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 13,
+            "value": 4100000
+        },
+        {
+            "name": "Wasp",
+            "model": "WSP-1A",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2464,
+            "tonnage": 20,
+            "battle_value": 462,
+            "engine_type": "Fusion",
+            "engine_model": "Omni 120",
+            "core_size": 120,
+            "movement_points": {
+                "walking": 6,
+                "running": 9,
+                "jumping": 6
+            },
+            "armor": {
+                "head": 6,
+                "center_torso": 8,
+                "right_torso": 6,
+                "left_torso": 6,
+                "right_arm": 4,
+                "left_arm": 4,
+                "right_leg": 6,
+                "left_leg": 6
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 1680000
+        },
+        {
+            "name": "Awesome",
+            "model": "AWS-8Q",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2665,
+            "tonnage": 80,
+            "battle_value": 1542,
+            "engine_type": "Fusion",
+            "engine_model": "Pitban 240",
+            "core_size": 240,
+            "movement_points": {
+                "walking": 3,
+                "running": 5,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 34,
+                "right_torso": 24,
+                "left_torso": 24,
+                "right_arm": 24,
+                "left_arm": 24,
+                "right_leg": 34,
+                "left_leg": 34
+            },
+            "weapons": [
+                {
+                    "type": "PPC",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "PPC",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "PPC",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 28,
+            "value": 9650000
+        },
+        {
+            "name": "Trebuchet",
+            "model": "TBT-5N",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2780,
+            "tonnage": 50,
+            "battle_value": 838,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 250",
+            "core_size": 250,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 22,
+                "right_torso": 18,
+                "left_torso": 18,
+                "right_arm": 16,
+                "left_arm": 16,
+                "right_leg": 20,
+                "left_leg": 20
+            },
+            "weapons": [
+                {
+                    "type": "LRM-15",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-15",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 12,
+            "value": 5640000
+        },
+        {
+            "name": "Battlemaster",
+            "model": "BLR-1G",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2633,
+            "tonnage": 85,
+            "battle_value": 1542,
+            "engine_type": "Fusion",
+            "engine_model": "Vlar 340",
+            "core_size": 340,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 40,
+                "right_torso": 28,
+                "left_torso": 28,
+                "right_arm": 28,
+                "left_arm": 28,
+                "right_leg": 36,
+                "left_leg": 36
+            },
+            "weapons": [
+                {
+                    "type": "PPC",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 2
+                },
+                {
+                    "type": "SRM-6",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 15,
+            "value": 11250000
+        },
+        {
+            "name": "Jenner",
+            "model": "JR7-D",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2785,
+            "tonnage": 35,
+            "battle_value": 799,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 245",
+            "core_size": 245,
+            "movement_points": {
+                "walking": 7,
+                "running": 11,
+                "jumping": 5
+            },
+            "armor": {
+                "head": 8,
+                "center_torso": 10,
+                "right_torso": 8,
+                "left_torso": 8,
+                "right_arm": 6,
+                "left_arm": 6,
+                "right_leg": 8,
+                "left_leg": 8
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "SRM-4",
+                    "location": "Center Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 11,
+            "value": 3960000
+        },
+        {
+            "name": "Warhammer",
+            "model": "WHM-6R",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2515,
+            "tonnage": 70,
+            "battle_value": 1299,
+            "engine_type": "Fusion",
+            "engine_model": "Vlar 280",
+            "core_size": 280,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 22,
+                "right_torso": 20,
+                "left_torso": 20,
+                "right_arm": 20,
+                "left_arm": 20,
+                "right_leg": 20,
+                "left_leg": 20
+            },
+            "weapons": [
+                {
+                    "type": "PPC",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "PPC",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-6",
+                    "location": "Right Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 20,
+            "value": 6800000
+        },
+        {
+            "name": "Spider",
+            "model": "SDR-5V",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2650,
+            "tonnage": 30,
+            "battle_value": 543,
+            "engine_type": "Fusion",
+            "engine_model": "Pitban 240",
+            "core_size": 240,
+            "movement_points": {
+                "walking": 8,
+                "running": 12,
+                "jumping": 8
+            },
+            "armor": {
+                "head": 6,
+                "center_torso": 8,
+                "right_torso": 6,
+                "left_torso": 6,
+                "right_arm": 4,
+                "left_arm": 4,
+                "right_leg": 6,
+                "left_leg": 6
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Center Torso",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 3140000
+        },
+        {
+            "name": "Atlas",
+            "model": "AS7-D",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2755,
+            "tonnage": 100,
+            "battle_value": 1542,
+            "engine_type": "Fusion",
+            "engine_model": "Vlar 300",
+            "core_size": 300,
+            "movement_points": {
+                "walking": 3,
+                "running": 5,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 47,
+                "right_torso": 32,
+                "left_torso": 32,
+                "right_arm": 34,
+                "left_arm": 34,
+                "right_leg": 41,
+                "left_leg": 41
+            },
+            "weapons": [
+                {
+                    "type": "AC/20",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-20",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "SRM-6",
+                    "location": "Center Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 20,
+            "value": 12980000
+        },
+        {
+            "name": "Stinger",
+            "model": "STG-3R",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2479,
+            "tonnage": 20,
+            "battle_value": 434,
+            "engine_type": "Fusion",
+            "engine_model": "Omni 120",
+            "core_size": 120,
+            "movement_points": {
+                "walking": 6,
+                "running": 9,
+                "jumping": 6
+            },
+            "armor": {
+                "head": 6,
+                "center_torso": 8,
+                "right_torso": 6,
+                "left_torso": 6,
+                "right_arm": 4,
+                "left_arm": 4,
+                "right_leg": 6,
+                "left_leg": 6
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-2",
+                    "location": "Center Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 1560000
+        },
+        {
+            "name": "Flea",
+            "model": "FLE-4",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2501,
+            "tonnage": 20,
+            "battle_value": 412,
+            "engine_type": "Fusion",
+            "engine_model": "Omni 140",
+            "core_size": 140,
+            "movement_points": {
+                "walking": 7,
+                "running": 11,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 6,
+                "center_torso": 8,
+                "right_torso": 6,
+                "left_torso": 6,
+                "right_arm": 4,
+                "left_arm": 4,
+                "right_leg": 6,
+                "left_leg": 6
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Flamer",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Small Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 1400000
+        },
+        {
+            "name": "Hermes II",
+            "model": "HER-2S",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2798,
+            "tonnage": 40,
+            "battle_value": 838,
+            "engine_type": "Fusion",
+            "engine_model": "Pitban 240",
+            "core_size": 240,
+            "movement_points": {
+                "walking": 6,
+                "running": 9,
+                "jumping": 6
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 16,
+                "right_torso": 12,
+                "left_torso": 12,
+                "right_arm": 12,
+                "left_arm": 12,
+                "right_leg": 16,
+                "left_leg": 16
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-10",
+                    "location": "Right Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 4650000
+        },
+        {
+            "name": "Panther",
+            "model": "PNT-9R",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2739,
+            "tonnage": 35,
+            "battle_value": 758,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 140",
+            "core_size": 140,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 4
+            },
+            "armor": {
+                "head": 8,
+                "center_torso": 16,
+                "right_torso": 12,
+                "left_torso": 12,
+                "right_arm": 12,
+                "left_arm": 12,
+                "right_leg": 16,
+                "left_leg": 16
+            },
+            "weapons": [
+                {
+                    "type": "PPC",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-4",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 13,
+            "value": 3590000
+        },
+        {
+            "name": "Firestarter",
+            "model": "FS9-H",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2550,
+            "tonnage": 35,
+            "battle_value": 678,
+            "engine_type": "Fusion",
+            "engine_model": "Omni 210",
+            "core_size": 210,
+            "movement_points": {
+                "walking": 6,
+                "running": 9,
+                "jumping": 6
+            },
+            "armor": {
+                "head": 8,
+                "center_torso": 10,
+                "right_torso": 8,
+                "left_torso": 8,
+                "right_arm": 6,
+                "left_arm": 6,
+                "right_leg": 8,
+                "left_leg": 8
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "Flamer",
+                    "location": "Right Torso",
+                    "quantity": 2
+                },
+                {
+                    "type": "Flamer",
+                    "location": "Left Torso",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 4090000
+        },
+        {
+            "name": "Hunchback",
+            "model": "HBK-4G",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2572,
+            "tonnage": 50,
+            "battle_value": 960,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 200",
+            "core_size": 200,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 23,
+                "right_torso": 16,
+                "left_torso": 16,
+                "right_arm": 16,
+                "left_arm": 16,
+                "right_leg": 20,
+                "left_leg": 20
+            },
+            "weapons": [
+                {
+                    "type": "AC/20",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Small Laser",
+                    "location": "Head",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 13,
+            "value": 5090000
+        },
+        {
+            "name": "Centurion",
+            "model": "CN9-A",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2801,
+            "tonnage": 50,
+            "battle_value": 772,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 200",
+            "core_size": 200,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 16,
+                "right_torso": 12,
+                "left_torso": 12,
+                "right_arm": 16,
+                "left_arm": 16,
+                "right_leg": 20,
+                "left_leg": 20
+            },
+            "weapons": [
+                {
+                    "type": "AC/10",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-10",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 12,
+            "value": 5140000
+        },
+        {
+            "name": "Blackjack",
+            "model": "BJ-1",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2757,
+            "tonnage": 45,
+            "battle_value": 795,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 180",
+            "core_size": 180,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 4
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 20,
+                "right_torso": 16,
+                "left_torso": 16,
+                "right_arm": 14,
+                "left_arm": 14,
+                "right_leg": 20,
+                "left_leg": 20
+            },
+            "weapons": [
+                {
+                    "type": "AC/2",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "AC/2",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 14,
+            "value": 4430000
+        },
+        {
+            "name": "Whitworth",
+            "model": "WTH-1",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2610,
+            "tonnage": 40,
+            "battle_value": 753,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 160",
+            "core_size": 160,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 4
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 16,
+                "right_torso": 12,
+                "left_torso": 12,
+                "right_arm": 12,
+                "left_arm": 12,
+                "right_leg": 16,
+                "left_leg": 16
+            },
+            "weapons": [
+                {
+                    "type": "LRM-10",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-10",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 12,
+            "value": 4300000
+        },
+        {
+            "name": "Dervish",
+            "model": "DV-6M",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2520,
+            "tonnage": 55,
+            "battle_value": 868,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 275",
+            "core_size": 275,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 18,
+                "right_torso": 14,
+                "left_torso": 14,
+                "right_arm": 18,
+                "left_arm": 18,
+                "right_leg": 22,
+                "left_leg": 22
+            },
+            "weapons": [
+                {
+                    "type": "LRM-10",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-10",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 2
+                },
+                {
+                    "type": "SRM-2",
+                    "location": "Center Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 13,
+            "value": 5840000
+        },
+        {
+            "name": "Jagermech",
+            "model": "JM6-S",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2751,
+            "tonnage": 65,
+            "battle_value": 1027,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 260",
+            "core_size": 260,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 30,
+                "right_torso": 22,
+                "left_torso": 22,
+                "right_arm": 20,
+                "left_arm": 20,
+                "right_leg": 26,
+                "left_leg": 26
+            },
+            "weapons": [
+                {
+                    "type": "AC/2",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "AC/2",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "AC/5",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "AC/5",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 6670000
+        },
+        {
+            "name": "Catapult",
+            "model": "CPLT-C1",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2561,
+            "tonnage": 65,
+            "battle_value": 1043,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 260",
+            "core_size": 260,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 4
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 22,
+                "right_torso": 20,
+                "left_torso": 20,
+                "right_arm": 20,
+                "left_arm": 20,
+                "right_leg": 26,
+                "left_leg": 26
+            },
+            "weapons": [
+                {
+                    "type": "LRM-15",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-15",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 14,
+            "value": 7410000
+        },
+        {
+            "name": "Marauder",
+            "model": "MAD-3R",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2612,
+            "tonnage": 75,
+            "battle_value": 1089,
+            "engine_type": "Fusion",
+            "engine_model": "Vlar 300",
+            "core_size": 300,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 23,
+                "right_torso": 16,
+                "left_torso": 16,
+                "right_arm": 24,
+                "left_arm": 24,
+                "right_leg": 32,
+                "left_leg": 32
+            },
+            "weapons": [
+                {
+                    "type": "PPC",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "PPC",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "AC/5",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 16,
+            "value": 7400000
+        },
+        {
+            "name": "Rifleman",
+            "model": "RFL-3N",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2505,
+            "tonnage": 60,
+            "battle_value": 797,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 240",
+            "core_size": 240,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 20,
+                "right_torso": 16,
+                "left_torso": 16,
+                "right_arm": 16,
+                "left_arm": 16,
+                "right_leg": 20,
+                "left_leg": 20
+            },
+            "weapons": [
+                {
+                    "type": "AC/5",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "AC/5",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 13,
+            "value": 5100000
+        },
+        {
+            "name": "Archer",
+            "model": "ARC-2R",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2474,
+            "tonnage": 70,
+            "battle_value": 1117,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 280",
+            "core_size": 280,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 22,
+                "right_torso": 22,
+                "left_torso": 22,
+                "right_arm": 22,
+                "left_arm": 22,
+                "right_leg": 30,
+                "left_leg": 30
+            },
+            "weapons": [
+                {
+                    "type": "LRM-20",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-20",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 16,
+            "value": 6800000
+        },
+        {
+            "name": "Stalker",
+            "model": "STK-3F",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2594,
+            "tonnage": 85,
+            "battle_value": 1225,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 255",
+            "core_size": 255,
+            "movement_points": {
+                "walking": 3,
+                "running": 5,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 40,
+                "right_torso": 26,
+                "left_torso": 26,
+                "right_arm": 28,
+                "left_arm": 28,
+                "right_leg": 36,
+                "left_leg": 36
+            },
+            "weapons": [
+                {
+                    "type": "LRM-20",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-20",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "SRM-6",
+                    "location": "Center Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 20,
+            "value": 10440000
+        },
+        {
+            "name": "Banshee",
+            "model": "BNC-3E",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2445,
+            "tonnage": 95,
+            "battle_value": 1223,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 380",
+            "core_size": 380,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 45,
+                "right_torso": 30,
+                "left_torso": 30,
+                "right_arm": 32,
+                "left_arm": 32,
+                "right_leg": 40,
+                "left_leg": 40
+            },
+            "weapons": [
+                {
+                    "type": "AC/5",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "PPC",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Small Laser",
+                    "location": "Head",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 15,
+            "value": 11650000
+        },
+        {
+            "name": "Cyclops",
+            "model": "CP-10-Z",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2710,
+            "tonnage": 90,
+            "battle_value": 1213,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 360",
+            "core_size": 360,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 43,
+                "right_torso": 29,
+                "left_torso": 29,
+                "right_arm": 30,
+                "left_arm": 30,
+                "right_leg": 38,
+                "left_leg": 38
+            },
+            "weapons": [
+                {
+                    "type": "AC/20",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                },
+                {
+                    "type": "SRM-4",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 16,
+            "value": 11460000
+        },
+        {
+            "name": "Charger",
+            "model": "CGR-1A1",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2665,
+            "tonnage": 80,
+            "battle_value": 820,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 400",
+            "core_size": 400,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 25,
+                "right_torso": 17,
+                "left_torso": 17,
+                "right_arm": 26,
+                "left_arm": 26,
+                "right_leg": 34,
+                "left_leg": 34
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Small Laser",
+                    "location": "Head",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 7410000
+        },
+        {
+            "name": "Zeus",
+            "model": "ZEU-6S",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2787,
+            "tonnage": 80,
+            "battle_value": 1148,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 320",
+            "core_size": 320,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 25,
+                "right_torso": 17,
+                "left_torso": 17,
+                "right_arm": 26,
+                "left_arm": 26,
+                "right_leg": 34,
+                "left_leg": 34
+            },
+            "weapons": [
+                {
+                    "type": "AC/5",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-15",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 16,
+            "value": 9710000
+        },
+        {
+            "name": "Wolverine",
+            "model": "WVR-6R",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2575,
+            "tonnage": 55,
+            "battle_value": 1101,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 275",
+            "core_size": 275,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 5
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 18,
+                "right_torso": 13,
+                "left_torso": 13,
+                "right_arm": 18,
+                "left_arm": 18,
+                "right_leg": 26,
+                "left_leg": 26
+            },
+            "weapons": [
+                {
+                    "type": "AC/5",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-6",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 12,
+            "value": 5970000
+        },
+        {
+            "name": "Griffin",
+            "model": "GRF-1N",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2492,
+            "tonnage": 55,
+            "battle_value": 1272,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 275",
+            "core_size": 275,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 5
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 18,
+                "right_torso": 13,
+                "left_torso": 13,
+                "right_arm": 18,
+                "left_arm": 18,
+                "right_leg": 26,
+                "left_leg": 26
+            },
+            "weapons": [
+                {
+                    "type": "PPC",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-10",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 13,
+            "value": 6260000
+        },
+        {
+            "name": "ShadowHawk",
+            "model": "SHD-2H",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2550,
+            "tonnage": 55,
+            "battle_value": 918,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 275",
+            "core_size": 275,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 3
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 18,
+                "right_torso": 13,
+                "left_torso": 13,
+                "right_arm": 18,
+                "left_arm": 18,
+                "right_leg": 26,
+                "left_leg": 26
+            },
+            "weapons": [
+                {
+                    "type": "AC/5",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-5",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 6140000
+        },
+        {
+            "name": "Orion",
+            "model": "ON1-K",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2456,
+            "tonnage": 75,
+            "battle_value": 1069,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 300",
+            "core_size": 300,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 23,
+                "right_torso": 15,
+                "left_torso": 15,
+                "right_arm": 24,
+                "left_arm": 24,
+                "right_leg": 32,
+                "left_leg": 32
+            },
+            "weapons": [
+                {
+                    "type": "AC/10",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-15",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 15,
+            "value": 8880000
+        },
+        {
+            "name": "Crusader",
+            "model": "CRD-3R",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2752,
+            "tonnage": 65,
+            "battle_value": 948,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 260",
+            "core_size": 260,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 21,
+                "right_torso": 14,
+                "left_torso": 14,
+                "right_arm": 20,
+                "left_arm": 20,
+                "right_leg": 28,
+                "left_leg": 28
+            },
+            "weapons": [
+                {
+                    "type": "LRM-15",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-15",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 14,
+            "value": 6880000
+        },
+        {
+            "name": "Grasshopper",
+            "model": "GHR-5H",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2780,
+            "tonnage": 70,
+            "battle_value": 1268,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 350",
+            "core_size": 350,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 5
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 22,
+                "right_torso": 15,
+                "left_torso": 15,
+                "right_arm": 22,
+                "left_arm": 22,
+                "right_leg": 30,
+                "left_leg": 30
+            },
+            "weapons": [
+                {
+                    "type": "Large Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 2
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 16,
+            "value": 8830000
+        },
+        {
+            "name": "Thunderbolt",
+            "model": "TDR-5S",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2505,
+            "tonnage": 65,
+            "battle_value": 1015,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 260",
+            "core_size": 260,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 21,
+                "right_torso": 14,
+                "left_torso": 14,
+                "right_arm": 20,
+                "left_arm": 20,
+                "right_leg": 28,
+                "left_leg": 28
+            },
+            "weapons": [
+                {
+                    "type": "Large Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-2",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-2",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Machine Gun",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 13,
+            "value": 7640000
+        },
+        {
+            "name": "Dragon",
+            "model": "DRG-1N",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2754,
+            "tonnage": 60,
+            "battle_value": 974,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 300",
+            "core_size": 300,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 20,
+                "right_torso": 14,
+                "left_torso": 14,
+                "right_arm": 19,
+                "left_arm": 19,
+                "right_leg": 27,
+                "left_leg": 27
+            },
+            "weapons": [
+                {
+                    "type": "AC/5",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-10",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 12,
+            "value": 6850000
+        },
+        {
+            "name": "Quickdraw",
+            "model": "QKD-4G",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2779,
+            "tonnage": 60,
+            "battle_value": 1012,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 300",
+            "core_size": 300,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 5
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 20,
+                "right_torso": 14,
+                "left_torso": 14,
+                "right_arm": 19,
+                "left_arm": 19,
+                "right_leg": 27,
+                "left_leg": 27
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-4",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-4",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 6970000
+        },
+        {
+            "name": "Victor",
+            "model": "VTR-9B",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2787,
+            "tonnage": 80,
+            "battle_value": 1165,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 320",
+            "core_size": 320,
+            "movement_points": {
+                "walking": 4,
+                "running": 6,
+                "jumping": 4
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 25,
+                "right_torso": 17,
+                "left_torso": 17,
+                "right_arm": 26,
+                "left_arm": 26,
+                "right_leg": 34,
+                "left_leg": 34
+            },
+            "weapons": [
+                {
+                    "type": "AC/20",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-4",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 13,
+            "value": 9560000
+        },
+        {
+            "name": "King Crab",
+            "model": "KGC-000",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2743,
+            "tonnage": 100,
+            "battle_value": 1509,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 300",
+            "core_size": 300,
+            "movement_points": {
+                "walking": 3,
+                "running": 5,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 47,
+                "right_torso": 32,
+                "left_torso": 32,
+                "right_arm": 34,
+                "left_arm": 34,
+                "right_leg": 42,
+                "left_leg": 42
+            },
+            "weapons": [
+                {
+                    "type": "AC/20",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "AC/20",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-15",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 15,
+            "value": 11680000
+        },
+        {
+            "name": "Highlander",
+            "model": "HGN-732",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2592,
+            "tonnage": 90,
+            "battle_value": 1838,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 270",
+            "core_size": 270,
+            "movement_points": {
+                "walking": 3,
+                "running": 5,
+                "jumping": 3
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 43,
+                "right_torso": 29,
+                "left_torso": 29,
+                "right_arm": 30,
+                "left_arm": 30,
+                "right_leg": 38,
+                "left_leg": 38
+            },
+            "weapons": [
+                {
+                    "type": "AC/20",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "LRM-20",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 2
+                }
+            ],
+            "heat_sinks": 18,
+            "value": 12340000
+        },
+        {
+            "name": "Goliath",
+            "model": "GOL-1H",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2652,
+            "tonnage": 80,
+            "battle_value": 1200,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 240",
+            "core_size": 240,
+            "movement_points": {
+                "walking": 3,
+                "running": 5,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 25,
+                "right_torso": 17,
+                "left_torso": 17,
+                "right_arm": 26,
+                "left_arm": 26,
+                "right_leg": 34,
+                "left_leg": 34
+            },
+            "weapons": [
+                {
+                    "type": "AC/20",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 15,
+            "value": 8980000
+        },
+        {
+            "name": "Mackie",
+            "model": "MSK-6S",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2439,
+            "tonnage": 100,
+            "battle_value": 1120,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 300",
+            "core_size": 300,
+            "movement_points": {
+                "walking": 3,
+                "running": 5,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 9,
+                "center_torso": 47,
+                "right_torso": 32,
+                "left_torso": 32,
+                "right_arm": 34,
+                "left_arm": 34,
+                "right_leg": 42,
+                "left_leg": 42
+            },
+            "weapons": [
+                {
+                    "type": "AC/10",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "AC/10",
+                    "location": "Left Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 15,
+            "value": 10070000
+        },
+        {
+            "name": "Ostscout",
+            "model": "OTT-7J",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2600,
+            "tonnage": 35,
+            "battle_value": 497,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 280",
+            "core_size": 280,
+            "movement_points": {
+                "walking": 8,
+                "running": 12,
+                "jumping": 8
+            },
+            "armor": {
+                "head": 8,
+                "center_torso": 12,
+                "right_torso": 8,
+                "left_torso": 8,
+                "right_arm": 6,
+                "left_arm": 6,
+                "right_leg": 12,
+                "left_leg": 12
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 11,
+            "value": 2880000
+        },
+        {
+            "name": "Valkyrie",
+            "model": "VLK-QA",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2787,
+            "tonnage": 30,
+            "battle_value": 563,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 150",
+            "core_size": 150,
+            "movement_points": {
+                "walking": 5,
+                "running": 8,
+                "jumping": 5
+            },
+            "armor": {
+                "head": 8,
+                "center_torso": 10,
+                "right_torso": 7,
+                "left_torso": 7,
+                "right_arm": 5,
+                "left_arm": 5,
+                "right_leg": 10,
+                "left_leg": 10
+            },
+            "weapons": [
+                {
+                    "type": "LRM-10",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 2800000
+        },
+        {
+            "name": "Javelin",
+            "model": "JVN-10N",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2751,
+            "tonnage": 30,
+            "battle_value": 487,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 180",
+            "core_size": 180,
+            "movement_points": {
+                "walking": 6,
+                "running": 9,
+                "jumping": 6
+            },
+            "armor": {
+                "head": 8,
+                "center_torso": 10,
+                "right_torso": 7,
+                "left_torso": 7,
+                "right_arm": 5,
+                "left_arm": 5,
+                "right_leg": 10,
+                "left_leg": 10
+            },
+            "weapons": [
+                {
+                    "type": "SRM-6",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-6",
+                    "location": "Left Torso",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 2480000
+        },
+        {
+            "name": "Urbanmech",
+            "model": "UM-R60",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2675,
+            "tonnage": 30,
+            "battle_value": 454,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 60",
+            "core_size": 60,
+            "movement_points": {
+                "walking": 2,
+                "running": 3,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 8,
+                "center_torso": 14,
+                "right_torso": 10,
+                "left_torso": 10,
+                "right_arm": 8,
+                "left_arm": 8,
+                "right_leg": 14,
+                "left_leg": 14
+            },
+            "weapons": [
+                {
+                    "type": "AC/10",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Small Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 2480000
+        },
+        {
+            "name": "Mongoose",
+            "model": "MON-66",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2660,
+            "tonnage": 25,
+            "battle_value": 632,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 200",
+            "core_size": 200,
+            "movement_points": {
+                "walking": 8,
+                "running": 12,
+                "jumping": 0
+            },
+            "armor": {
+                "head": 6,
+                "center_torso": 8,
+                "right_torso": 6,
+                "left_torso": 6,
+                "right_arm": 4,
+                "left_arm": 4,
+                "right_leg": 8,
+                "left_leg": 8
+            },
+            "weapons": [
+                {
+                    "type": "Medium Laser",
+                    "location": "Right Arm",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 2740000
+        },
+        {
+            "name": "Commando",
+            "model": "COM-2D",
+            "tech_base": "Inner Sphere",
+            "introduction_year": 2463,
+            "tonnage": 25,
+            "battle_value": 558,
+            "engine_type": "Fusion",
+            "engine_model": "Magna 150",
+            "core_size": 150,
+            "movement_points": {
+                "walking": 6,
+                "running": 9,
+                "jumping": 6
+            },
+            "armor": {
+                "head": 6,
+                "center_torso": 8,
+                "right_torso": 6,
+                "left_torso": 6,
+                "right_arm": 4,
+                "left_arm": 4,
+                "right_leg": 8,
+                "left_leg": 8
+            },
+            "weapons": [
+                {
+                    "type": "SRM-2",
+                    "location": "Right Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "SRM-2",
+                    "location": "Left Torso",
+                    "quantity": 1
+                },
+                {
+                    "type": "Medium Laser",
+                    "location": "Left Arm",
+                    "quantity": 1
+                }
+            ],
+            "heat_sinks": 10,
+            "value": 2530000
+        }
+    ]
+}

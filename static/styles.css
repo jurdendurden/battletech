@@ -1,0 +1,315 @@
+/* BattleTech font declaration */
+@font-face {
+    font-family: 'BTLogo';
+    src: url('fonts/BTLogo_old.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    /* Dark theme color palette */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --accent-primary: #4a9eff;
+    --accent-secondary: #2d6bdb;
+    --border-color: #404040;
+    --hover-color: #3d3d3d;
+    --success-color: #4caf50;
+    --error-color: #f44336;
+    --warning-color: #ff9800;
+}
+
+/* Base styles */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Container styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header styles */
+header {
+    background-color: var(--bg-secondary);
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    font-size: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+h3 {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Button styles */
+button {
+    background-color: var(--accent-primary);
+    color: var(--text-primary);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    background-color: var(--accent-secondary);
+}
+
+button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+/* Input styles */
+input, select, textarea {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+/* Card styles */
+.card {
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Map container specific styles */
+#map-container {
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Controls section */
+.controls {
+    background-color: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Status messages */
+.status {
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.status.success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status.error {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.status.warning {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+/* Tooltip styles */
+.tooltip {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Loading spinner */
+.loading-spinner {
+    border: 4px solid var(--bg-secondary);
+    border-top: 4px solid var(--accent-primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* BattleTech specific styles */
+.battletech-title {
+    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    color: var(--accent-primary);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.battletech-heading {
+    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent-primary);
+    border-bottom: 2px solid var(--accent-primary);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.battletech-label {
+    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+}
+
+/* Experience Progress Bar Styles */
+.experience-container {
+    margin: 8px 0;
+}
+
+.experience-bar {
+    background-color: var(--bg-primary);
+    border-radius: 4px;
+    height: 12px;
+    overflow: hidden;
+    margin-top: 4px;
+    border: 1px solid var(--border-color);
+    position: relative;
+}
+
+.experience-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 50%, #CDDC39 100%);
+    transition: width 0.3s ease;
+    border-radius: 3px;
+}
+
+.experience-text {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.experience-text .level-info {
+    font-weight: bold;
+    color: var(--accent-primary);
+}
+
+.experience-text .xp-numbers {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+}
+
+/* Movement Points Progress Bar Styles */
+.movement-container {
+    margin: 8px 0;
+}
+
+.movement-bar {
+    background-color: var(--bg-primary);
+    border-radius: 4px;
+    height: 12px;
+    overflow: hidden;
+    margin-top: 4px;
+    border: 1px solid var(--border-color);
+    position: relative;
+}
+
+.movement-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2196F3 0%, #03A9F4 50%, #00BCD4 100%);
+    transition: width 0.3s ease;
+    border-radius: 3px;
+}
+
+.movement-text {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.movement-text .movement-info {
+    font-weight: bold;
+    color: var(--accent-primary);
+}
+
+.movement-text .mp-numbers {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    #map-container {
+        padding: 10px;
+    }
+    
+    .battletech-title {
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+} 

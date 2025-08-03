@@ -1,0 +1,182 @@
+{
+  "escort_mission": {
+    "name": "Escort Mission",
+    "description": "Escort a convoy through dangerous territory.",
+    "difficulty": "medium",
+    "duration": 3,
+    "base_reward_credits": 7500,
+    "base_reward_experience": 1500,
+    "level_scaling": {
+      "credits_per_level": 2500,
+      "experience_per_level": 500
+    },
+    "requirements": {
+      "min_level": 2,
+      "mechs_required": 1
+    },
+    "risk_level": 0.3,
+    "terrain_preferences": ["plains", "forest", "hills"]
+  },
+  "recon_mission": {
+    "name": "Reconnaissance Mission",
+    "description": "Scout enemy positions and report back.",
+    "difficulty": "easy",
+    "duration": 2,
+    "base_reward_credits": 4000,
+    "base_reward_experience": 1000,
+    "level_scaling": {
+      "credits_per_level": 1000,
+      "experience_per_level": 300
+    },
+    "requirements": {
+      "min_level": 1,
+      "mechs_required": 1
+    },
+    "risk_level": 0.2,
+    "terrain_preferences": ["forest", "jungle", "hills"]
+  },
+  "assault_mission": {
+    "name": "Assault Mission",
+    "description": "Lead an assault on an enemy stronghold.",
+    "difficulty": "hard",
+    "duration": 5,
+    "base_reward_credits": 15000,
+    "base_reward_experience": 3000,
+    "level_scaling": {
+      "credits_per_level": 5000,
+      "experience_per_level": 1000
+    },
+    "requirements": {
+      "min_level": 5,
+      "mechs_required": 2
+    },
+    "risk_level": 0.4,
+    "terrain_preferences": ["plains", "desert", "tundra"]
+  },
+  "patrol_mission": {
+    "name": "Patrol Mission",
+    "description": "Patrol the frontier and protect settlements from raiders.",
+    "difficulty": "easy",
+    "duration": 2,
+    "base_reward_credits": 3500,
+    "base_reward_experience": 800,
+    "level_scaling": {
+      "credits_per_level": 800,
+      "experience_per_level": 200
+    },
+    "requirements": {
+      "min_level": 1,
+      "mechs_required": 1
+    },
+    "risk_level": 0.25,
+    "terrain_preferences": ["plains", "forest", "beach"]
+  },
+  "salvage_mission": {
+    "name": "Salvage Operation",
+    "description": "Recover valuable salvage from an ancient battlefield.",
+    "difficulty": "medium",
+    "duration": 3,
+    "base_reward_credits": 6000,
+    "base_reward_experience": 1200,
+    "level_scaling": {
+      "credits_per_level": 1800,
+      "experience_per_level": 400
+    },
+    "requirements": {
+      "min_level": 3,
+      "mechs_required": 1
+    },
+    "risk_level": 0.3,
+    "terrain_preferences": ["desert", "mountains", "tundra"]
+  },
+  "raid_mission": {
+    "name": "Raid Mission",
+    "description": "Strike fast and hard against enemy supply lines.",
+    "difficulty": "hard",
+    "duration": 4,
+    "base_reward_credits": 12000,
+    "base_reward_experience": 2500,
+    "level_scaling": {
+      "credits_per_level": 4000,
+      "experience_per_level": 800
+    },
+    "requirements": {
+      "min_level": 4,
+      "mechs_required": 2
+    },
+    "risk_level": 0.4,
+    "terrain_preferences": ["jungle", "forest", "mountains"]
+  },
+  "garrison_duty": {
+    "name": "Garrison Duty",
+    "description": "Defend a strategic location from enemy attacks.",
+    "difficulty": "medium",
+    "duration": 4,
+    "base_reward_credits": 8000,
+    "base_reward_experience": 1600,
+    "level_scaling": {
+      "credits_per_level": 2000,
+      "experience_per_level": 400
+    },
+    "requirements": {
+      "min_level": 2,
+      "mechs_required": 1
+    },
+    "risk_level": 0.2,
+    "terrain_preferences": ["plains", "hills", "desert"]
+  },
+  "deep_strike": {
+    "name": "Deep Strike Mission",
+    "description": "Penetrate deep into enemy territory to eliminate high-value targets.",
+    "difficulty": "extreme",
+    "duration": 6,
+    "base_reward_credits": 25000,
+    "base_reward_experience": 5000,
+    "level_scaling": {
+      "credits_per_level": 8000,
+      "experience_per_level": 1500
+    },
+    "requirements": {
+      "min_level": 8,
+      "mechs_required": 3
+    },
+    "risk_level": 0.5,
+    "terrain_preferences": ["mountains", "jungle", "snow_peaks"]
+  },
+  "training_mission": {
+    "name": "Training Exercise",
+    "description": "Participate in combat training exercises to hone your skills.",
+    "difficulty": "easy",
+    "duration": 1,
+    "base_reward_credits": 2000,
+    "base_reward_experience": 600,
+    "level_scaling": {
+      "credits_per_level": 500,
+      "experience_per_level": 150
+    },
+    "requirements": {
+      "min_level": 1,
+      "mechs_required": 1
+    },
+    "risk_level": 0.1,
+    "terrain_preferences": ["plains", "desert", "tundra"]
+  },
+  "bounty_hunt": {
+    "name": "Bounty Hunt",
+    "description": "Track down and eliminate notorious pirates and mercenaries.",
+    "difficulty": "hard",
+    "duration": 4,
+    "base_reward_credits": 18000,
+    "base_reward_experience": 3500,
+    "level_scaling": {
+      "credits_per_level": 6000,
+      "experience_per_level": 1200
+    },
+    "requirements": {
+      "min_level": 6,
+      "mechs_required": 2
+    },
+    "risk_level": 0.45,
+    "terrain_preferences": ["jungle", "forest", "mountains", "desert"]
+  }
+} 
