@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BattleTech MUD</title>
+    <title>BattleTech MMO</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         /* Game-specific styles */
         .game-container {
             display: flex;
+            flex-direction: column;
             gap: 20px;
             height: 100vh;
             padding: 20px;
+        }
+        
+        .game-content {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
         }
         
         .map-section {
@@ -34,7 +42,7 @@
             padding: 10px;
             height: 300px;
             overflow-y: auto;
-            font-family: 'Courier New', monospace;
+            font-family: 'Consolas', 'Courier New', monospace;
             font-size: 14px;
             line-height: 1.4;
         }
@@ -42,8 +50,126 @@
         .player-info {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 10px;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .player-info-tabs {
+            display: flex;
+            gap: 18px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+        }
+
+        .player-info-tab-btn {
+            position: relative;
+            color: var(--text-secondary);
+            padding: 8px 4px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .player-info-tab-btn::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1px;
+            height: 3px;
+            background: linear-gradient(135deg, rgba(57, 255, 20, 0.6), rgba(173, 255, 47, 0.6));
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.2s ease;
+        }
+
+        .player-info-tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .player-info-tab-btn:hover::after {
+            transform: scaleX(1);
+        }
+
+        .player-info-tab-btn.active {
+            color: var(--neon-start);
+        }
+
+        .player-info-tab-btn.active::after {
+            transform: scaleX(1);
+            background: linear-gradient(135deg, var(--neon-start), var(--neon-end));
+        }
+
+        .player-info-tab-content {
+            display: none;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .player-info-tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .player-info-section {
+            background-color: rgba(21, 23, 28, 0.85);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+        }
+
+        .player-info-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .player-info-subheading {
+            font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--neon-start);
+            margin-bottom: 8px;
+        }
+
+        .player-info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .player-info-list li {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(57, 255, 20, 0.08);
+        }
+
+        .player-info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .armor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 8px;
+        }
+
+        .armor-cell {
+            background-color: rgba(17, 19, 25, 0.9);
+            border: 1px solid rgba(57, 255, 20, 0.12);
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        .player-info-empty {
+            color: var(--text-secondary);
+            font-style: italic;
         }
         
         .character-creation {
@@ -71,11 +197,15 @@
         }
         
         .skill-allocation {
-            border: 2px solid var(--accent-primary);
+            border: 2px solid transparent;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 15px;
-            background-color: rgba(74, 158, 255, 0.1);
+            background-image:
+                linear-gradient(var(--bg-secondary), var(--bg-secondary)),
+                linear-gradient(135deg, rgba(112, 128, 144, 0.6), rgba(57, 255, 20, 0.35));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
         }
         
         .points-display {
@@ -105,13 +235,20 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--accent-primary);
-            border: 2px solid var(--accent-secondary);
+            color: var(--text-primary);
+            border: 2px solid transparent;
+            background-image:
+                linear-gradient(var(--bg-secondary), var(--bg-secondary)),
+                linear-gradient(135deg, var(--neon-start), var(--neon-end));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         
         .skill-btn:hover {
-            background-color: var(--accent-secondary);
             transform: scale(1.1);
+            box-shadow: 0 0 14px rgba(57, 255, 20, 0.4);
         }
         
         .skill-btn:disabled {
@@ -123,10 +260,15 @@
         
         .skill-input input[readonly] {
             background-color: var(--bg-primary);
-            color: var(--accent-primary);
+            color: var(--neon-start);
             text-align: center;
             font-weight: bold;
-            border: 2px solid var(--accent-primary);
+            border: 2px solid transparent;
+            background-image:
+                linear-gradient(var(--bg-primary), var(--bg-primary)),
+                linear-gradient(135deg, var(--neon-start), var(--neon-end));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
             width: 50px;
         }
         
@@ -157,6 +299,11 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+        }
+
+        #character_modal,
+        #load_modal {
+            z-index: 2500;
         }
         
         .modal-content {
@@ -205,31 +352,36 @@
         
         .modal-tabs {
             display: flex;
-            border-bottom: 1px solid var(--border-color);
+            gap: 4px;
+            border-bottom: none;
         }
         
         .tab-btn {
-            background-color: var(--bg-primary);
+            position: relative;
+            background: linear-gradient(160deg, rgba(21, 23, 28, 0.9), rgba(17, 19, 25, 0.9));
             color: var(--text-secondary);
             border: none;
-            padding: 12px 24px;
+            padding: 10px 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: color 0.2s ease;
+            font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid transparent;
+            border-radius: 6px 6px 0 0;
         }
         
         .tab-btn:hover {
-            background-color: var(--hover-color);
             color: var(--text-primary);
         }
         
         .tab-btn.active {
-            background-color: var(--bg-secondary);
-            color: var(--accent-primary);
-            border-bottom: 2px solid var(--accent-primary);
+            color: var(--neon-start);
+            box-shadow: 0 0 14px rgba(57, 255, 20, 0.35);
+        }
+        
+        .modal-tabs .tab-btn.active {
+            background: linear-gradient(135deg, rgba(57, 255, 20, 0.25), rgba(173, 255, 47, 0.2));
+            color: var(--neon-start);
         }
         
         .modal-body {
@@ -366,6 +518,76 @@
             flex: 1;
         }
 
+        .map-controls-overlay {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            z-index: 150;
+        }
+
+        .map-controls-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 48px);
+            grid-template-rows: repeat(3, 48px);
+            gap: 6px;
+            justify-items: center;
+            align-items: center;
+        }
+
+        .map-arrow-btn {
+            color: var(--text-primary);
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            font-size: 1.35rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            border: 2px solid transparent;
+            background-image:
+                linear-gradient(rgba(15, 17, 22, 0.85), rgba(15, 17, 22, 0.85)),
+                linear-gradient(135deg, var(--neon-start), var(--neon-end));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            box-shadow: 0 0 12px rgba(57, 255, 20, 0.25);
+        }
+
+        .map-arrow-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 16px rgba(57, 255, 20, 0.4);
+        }
+
+        .map-arrow-btn--up {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .map-arrow-btn--left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .map-arrow-btn--center {
+            grid-column: 2;
+            grid-row: 2;
+            font-size: 1.2rem;
+        }
+
+        .map-arrow-btn--right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        .map-arrow-btn--down {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
         #tooltip {
             position: absolute;
             pointer-events: none;
@@ -391,6 +613,171 @@
             display: inline-block;
         }
         
+        .intro-modal {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(45, 45, 45, 0.95));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        
+        .intro-modal.hidden {
+            display: none;
+        }
+
+        .intro-content {
+            background-color: rgba(17, 17, 17, 0.9);
+            border: 2px solid var(--accent-primary);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+        }
+        
+        .intro-title {
+            font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
+            font-size: 3.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            margin-bottom: 20px;
+        }
+        
+        .intro-text {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .intro-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .intro-btn {
+            color: var(--text-primary);
+            padding: 16px 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 180px;
+            border: 2px solid transparent;
+            background-image:
+                linear-gradient(160deg, rgba(34, 38, 46, 0.95), rgba(17, 19, 25, 0.95)),
+                linear-gradient(135deg, var(--neon-start), var(--neon-end));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            box-shadow:
+                0 6px 0 rgba(12, 14, 18, 0.9),
+                0 0 18px rgba(57, 255, 20, 0.28);
+        }
+        
+        .intro-btn:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 0 rgba(12, 14, 18, 0.85),
+                0 0 22px rgba(57, 255, 20, 0.4);
+        }
+        
+        .intro-btn:active {
+            transform: translateY(2px);
+            box-shadow:
+                0 2px 0 rgba(12, 14, 18, 0.9),
+                0 0 16px rgba(57, 255, 20, 0.35);
+        }
+        
+        .character-modal-content,
+        .load-modal-content {
+            max-width: 720px;
+        }
+        
+        .load-modal-body {
+            padding: 24px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent-primary);
+        }
+        
+        .character-modal-content,
+        .load-modal-content {
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+        }
+
+        .character-modal-content .modal-body,
+        .load-modal-content .load-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .character-modal-content .modal-actions,
+        .load-modal-content .modal-actions {
+            padding: 16px 24px;
+            margin-top: 0;
+        }
+
+        #character_modal .skill-input {
+            display: grid;
+            grid-template-columns: 140px 40px 70px 40px 1fr;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #character_modal .skill-input label {
+            text-align: right;
+            padding-right: 8px;
+        }
+
+        #character_modal .skill-input input[type="text"] {
+            grid-column: 2 / span 4;
+            width: 100%;
+        }
+
+        #character_modal .skill-input input[type="number"] {
+            width: 70px;
+            text-align: center;
+        }
+
+        #character_modal .skill-input button {
+            justify-self: center;
+        }
+
+        #character_modal .skill-input span {
+            justify-self: start;
+            font-size: 0.85em;
+        }
+
         .dropdown-btn {
             background-color: var(--accent-primary);
             color: var(--text-primary);
@@ -398,7 +785,7 @@
             padding: 12px 20px;
             border-radius: 6px;
             cursor: pointer;
-            font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
             font-size: 1em;
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -410,6 +797,28 @@
             background-color: var(--accent-secondary);
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .game-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            background-color: var(--bg-secondary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+            border-bottom: 1px solid rgba(57, 255, 20, 0.12);
+            margin-bottom: 20px;
+        }
+
+        .game-top-bar h1 {
+            margin: 0;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
         }
         
         .dropdown-menu {
@@ -431,7 +840,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             color: var(--text-primary);
-            font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-size: 0.9em;
@@ -560,6 +969,39 @@
             font-weight: bold;
             color: var(--text-primary);
             margin: 0;
+        }
+        
+        .unit-header .unit-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .rename-icon {
+            background: none;
+            border: none;
+            padding: 4px;
+            margin: -4px 0;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            border-radius: 4px;
+            transition: color 0.2s ease, background-color 0.2s ease;
+        }
+        
+        .rename-icon:hover,
+        .rename-icon:focus {
+            color: var(--accent-primary);
+            background-color: rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+        
+        .rename-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
         }
         
         .unit-status {
@@ -740,15 +1182,19 @@
         }
         
         .starting-mech-card:hover {
-            border-color: var(--accent-primary);
+            border-color: var(--neon-start);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 12px rgba(57, 255, 20, 0.25);
         }
         
         .starting-mech-card.selected {
-            border-color: var(--accent-primary);
-            background-color: rgba(74, 158, 255, 0.1);
-            box-shadow: 0 0 0 2px var(--accent-primary);
+            border-color: transparent;
+            background-image:
+                linear-gradient(var(--bg-primary), var(--bg-primary)),
+                linear-gradient(135deg, rgba(57, 255, 20, 0.35), rgba(173, 255, 47, 0.35));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            box-shadow: 0 0 14px rgba(57, 255, 20, 0.35);
         }
         
         .starting-mech-name {
@@ -775,16 +1221,146 @@
             color: var(--text-secondary);
             font-style: italic;
         }
+
+        .saved-characters-section {
+            margin-bottom: 20px;
+        }
+
+        .saved-characters-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .saved-character-btn {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--accent-primary);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .saved-character-btn:hover {
+            background-color: var(--accent-primary);
+            transform: translateY(-1px);
+        }
+
+        .no-saved-characters {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <!-- Map Section -->
-        <div class="map-section">
-            <header>
-                <h1 class="battletech-title">BattleTech MUD</h1>
-            </header>
-            
+    <div id="intro_modal" class="intro-modal">
+        <div class="intro-content">
+            <h2 class="intro-title">BattleTech MMO</h2>
+            <p class="intro-text">
+                Welcome to the Inner Sphere, Commander. Muster your forces, forge your legend,
+                and carve a path across the stars. Create a new MechWarrior or rally a veteran pilot to begin.
+            </p>
+            <div class="intro-actions">
+                <button class="intro-btn" onclick="startNewCharacter()">New Character</button>
+                <button class="intro-btn" onclick="openLoadCharacter()">Load Character</button>
+                <button class="intro-btn" onclick="quitGame()">Quit</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="character_modal" class="shop-modal hidden">
+        <div class="modal-content character-modal-content">
+            <div class="modal-header">
+                <h3 class="battletech-heading">New MechWarrior</h3>
+                <button class="modal-close" onclick="returnToIntro()">X</button>
+            </div>
+            <div class="modal-body">
+                <div id="character_section" class="character-creation">
+                    <div id="character_creation">
+                        <div class="skill-input">
+                            <label for="char_name" class="battletech-label">Name:</label>
+                            <input type="text" id="char_name" placeholder="Enter character name">
+                        </div>
+                        <div class="skill-allocation">
+                            <h4 class="battletech-label">Skill Allocation (10 points total):</h4>
+                            <div id="points_remaining" class="points-display">Points Remaining: 10</div>
+                            <div class="skill-input">
+                                <label for="gunnery" class="battletech-label">Gunnery:</label>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', 1)">+</button>
+                                <input type="number" id="gunnery" min="0" max="8" value="8" readonly>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', -1)">-</button>
+                                <span>(0=best, 8=worst)</span>
+                            </div>
+                            <div class="skill-input">
+                                <label for="piloting" class="battletech-label">Piloting:</label>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('piloting', 1)">+</button>
+                                <input type="number" id="piloting" min="0" max="8" value="8" readonly>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('piloting', -1)">-</button>
+                                <span>(0=best, 8=worst)</span>
+                            </div>
+                            <div class="skill-input">
+                                <label for="guts" class="battletech-label">Guts:</label>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('guts', 1)">+</button>
+                                <input type="number" id="guts" min="0" max="8" value="8" readonly>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('guts', -1)">-</button>
+                                <span>(0=best, 8=worst)</span>
+                            </div>
+                            <div class="skill-input">
+                                <label for="tactics" class="battletech-label">Tactics:</label>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('tactics', 1)">+</button>
+                                <input type="number" id="tactics" min="0" max="8" value="8" readonly>
+                                <button type="button" class="skill-btn" onclick="adjustSkill('tactics', -1)">-</button>
+                                <span>(0=best, 8=worst)</span>
+                            </div>
+                        </div>
+                        <div class="starting-mech-selection">
+                            <h4 class="battletech-label">Choose Your Starting Mech:</h4>
+                            <div id="starting_mechs_list" class="starting-mechs-grid">
+                                <!-- Starting mechs will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button onclick="returnToIntro()">Cancel</button>
+                <button onclick="createCharacter()">Create Character</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="load_modal" class="shop-modal hidden">
+        <div class="modal-content load-modal-content">
+            <div class="modal-header">
+                <h3 class="battletech-heading">Load MechWarrior</h3>
+                <button class="modal-close" onclick="returnToIntro()">X</button>
+            </div>
+            <div class="load-modal-body">
+                <div class="saved-characters-section">
+                    <h4 class="battletech-label">Saved MechWarriors:</h4>
+                    <div id="saved_characters_list" class="saved-characters-list"></div>
+                </div>
+                <div class="skill-input" style="margin-bottom: 20px;">
+                    <label for="load_char_name" class="battletech-label">Name:</label>
+                    <input type="text" id="load_char_name" placeholder="Enter character name to load">
+                </div>
+                <div class="modal-actions">
+                    <button onclick="returnToIntro()">Cancel</button>
+                    <button onclick="loadCharacter('load_modal')">Load Character</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="game_ui" class="game-container hidden">
+        <div class="game-top-bar">
+            <h1 class="battletech-title">BattleTech MMO</h1>
             <div class="controls">
                 <div class="dropdown-container">
                     <button class="dropdown-btn" onclick="toggleDropdown()">
@@ -809,75 +1385,48 @@
                 </div>
                 <div id="loading" class="loading-spinner" style="display: none;"></div>
             </div>
-            
-            <div class="card" id="map_container">
-                <canvas id="map_canvas" width="832" height="832"></canvas>
-                <div id="tooltip" class="tooltip"></div>
-                <div id="player_marker" class="player-marker hidden"></div>
-            </div>
         </div>
-        
-        <!-- Game Panel -->
-        <div class="game-panel">
-            <!-- Character Creation/Loading -->
-            <div id="character_section" class="character-creation">
-                <h3 class="battletech-heading">Character</h3>
-                <div id="character_creation">
-                    <div class="skill-input">
-                        <label for="char_name" class="battletech-label">Name:</label>
-                        <input type="text" id="char_name" placeholder="Enter character name">
-                    </div>
-                    <div class="skill-allocation">
-                        <h4 class="battletech-label">Skill Allocation (10 points total):</h4>
-                        <div id="points_remaining" class="points-display">Points Remaining: 10</div>
-                        <div class="skill-input">
-                            <label for="gunnery" class="battletech-label">Gunnery:</label>
-                            <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', 1)">+</button>
-                            <input type="number" id="gunnery" min="0" max="8" value="8" readonly>
-                            <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', -1)">-</button>
-                            <span>(0=best, 8=worst)</span>
+        <div class="game-content">
+            <!-- Map Section -->
+            <div class="map-section">
+                
+                <div class="card" id="map_container">
+                    <canvas id="map_canvas" width="832" height="832"></canvas>
+                    <div id="tooltip" class="tooltip"></div>
+                    <div id="player_marker" class="player-marker hidden"></div>
+                    <div class="map-controls-overlay">
+                        <div class="map-controls-grid">
+                            <button class="map-arrow-btn map-arrow-btn--up" onclick="panMap('up')" aria-label="Pan map up">▲</button>
+                            <button class="map-arrow-btn map-arrow-btn--left" onclick="panMap('left')" aria-label="Pan map left">◀</button>
+                            <button class="map-arrow-btn map-arrow-btn--center" onclick="centerMapOnPlayer()" aria-label="Center map on player">◎</button>
+                            <button class="map-arrow-btn map-arrow-btn--right" onclick="panMap('right')" aria-label="Pan map right">▶</button>
+                            <button class="map-arrow-btn map-arrow-btn--down" onclick="panMap('down')" aria-label="Pan map down">▼</button>
                         </div>
-                        <div class="skill-input">
-                            <label for="piloting" class="battletech-label">Piloting:</label>
-                            <button type="button" class="skill-btn" onclick="adjustSkill('piloting', 1)">+</button>
-                            <input type="number" id="piloting" min="0" max="8" value="8" readonly>
-                            <button type="button" class="skill-btn" onclick="adjustSkill('piloting', -1)">-</button>
-                            <span>(0=best, 8=worst)</span>
-                        </div>
-                        <div class="skill-input">
-                            <label for="guts" class="battletech-label">Guts:</label>
-                            <button type="button" class="skill-btn" onclick="adjustSkill('guts', 1)">+</button>
-                            <input type="number" id="guts" min="0" max="8" value="8" readonly>
-                            <button type="button" class="skill-btn" onclick="adjustSkill('guts', -1)">-</button>
-                            <span>(0=best, 8=worst)</span>
-                        </div>
-                        <div class="skill-input">
-                            <label for="tactics" class="battletech-label">Tactics:</label>
-                            <button type="button" class="skill-btn" onclick="adjustSkill('tactics', 1)">+</button>
-                            <input type="number" id="tactics" min="0" max="8" value="8" readonly>
-                            <button type="button" class="skill-btn" onclick="adjustSkill('tactics', -1)">-</button>
-                            <span>(0=best, 8=worst)</span>
-                        </div>
-                    </div>
-                    <div class="starting-mech-selection">
-                        <h4 class="battletech-label">Choose Your Starting Mech:</h4>
-                        <div id="starting_mechs_list" class="starting-mechs-grid">
-                            <!-- Starting mechs will be loaded here -->
-                        </div>
-                    </div>
-                    <div class="game-controls">
-                        <button onclick="createCharacter()">Create Character</button>
-                        <button onclick="loadCharacter()">Load Character</button>
                     </div>
                 </div>
             </div>
-            
+        
+            <!-- Game Panel -->
+            <div class="game-panel">
             <!-- Player Info -->
             <div id="player_info" class="player-info hidden">
-                <h3 class="battletech-heading">Player Info</h3>
-                <div id="player_stats"></div>
-
+                <h3 class="battletech-heading">MechWarrior Status</h3>
+                <div class="player-info-tabs">
+                    <button class="player-info-tab-btn active" data-tab="overview" onclick="showPlayerInfoTab('overview')">Player Info</button>
+                    <button class="player-info-tab-btn" data-tab="equipment" onclick="showPlayerInfoTab('equipment')">Equipment / Ammo</button>
+                    <button class="player-info-tab-btn" data-tab="mech" onclick="showPlayerInfoTab('mech')">Active Chassis</button>
+                </div>
+                <div id="player_tab_overview" class="player-info-tab-content active" data-tab="overview">
+                    <div id="player_stats"></div>
+                </div>
+                <div id="player_tab_equipment" class="player-info-tab-content" data-tab="equipment">
+                    <div id="player_equipment"></div>
+                </div>
+                <div id="player_tab_mech" class="player-info-tab-content" data-tab="mech">
+                    <div id="player_mech_details"></div>
             </div>
+        </div>
+    </div>
             
             <!-- Encounter Panel -->
             <div id="encounter_panel" class="encounter-panel hidden">
@@ -1007,7 +1556,7 @@
             
             <!-- Text Output -->
             <div class="text-output" id="text_output">
-                <div>Welcome to BattleTech MUD!</div>
+                <div>Welcome to BattleTech MMO!</div>
                 <div>Create or load a character to begin your journey.</div>
                 <div>Click on the map to move your character.</div>
                 <div>---</div>
@@ -1020,6 +1569,7 @@
         let currentPlayer = null;
         let currentMapData = null;
         let currentEncounter = null;
+        let selectedStartingMech = null;
         
         // Constants for hexagon drawing
         const HEX_SIZE = 13;
@@ -1033,6 +1583,104 @@
         let mapOffsetY = 0;
         let lastMapOffsetX = 0;
         let lastMapOffsetY = 0;
+        let dragStartCursorX = 0;
+        let dragStartCursorY = 0;
+        let dragMoved = false;
+
+        function showGameUI() {
+            document.getElementById('game_ui').classList.remove('hidden');
+        }
+
+        function hideGameUI() {
+            document.getElementById('game_ui').classList.add('hidden');
+        }
+
+        function showIntroModal() {
+            document.getElementById('intro_modal').classList.remove('hidden');
+        }
+
+        function hideIntroModal() {
+            document.getElementById('intro_modal').classList.add('hidden');
+        }
+
+        function showCharacterModal() {
+            resetCharacterCreationForm();
+            document.getElementById('character_modal').classList.remove('hidden');
+            loadStartingMechs();
+        }
+
+        function hideCharacterModal() {
+            document.getElementById('character_modal').classList.add('hidden');
+        }
+
+        function showLoadModal() {
+            const input = document.getElementById('load_char_name');
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+            document.getElementById('load_modal').classList.remove('hidden');
+            const listContainer = document.getElementById('saved_characters_list');
+            if (listContainer) {
+                listContainer.innerHTML = '<div class="no-saved-characters">Loading MechWarriors...</div>';
+            }
+            fetchSavedCharacters();
+        }
+
+        function hideLoadModal() {
+            document.getElementById('load_modal').classList.add('hidden');
+        }
+
+        function resetCharacterCreationForm() {
+            const nameInput = document.getElementById('char_name');
+            if (nameInput) {
+                nameInput.value = '';
+            }
+            const skills = ['gunnery', 'piloting', 'guts', 'tactics'];
+            skills.forEach(skill => {
+                const input = document.getElementById(skill);
+                if (input) {
+                    input.value = '8';
+                }
+            });
+            selectedStartingMech = null;
+            document.querySelectorAll('.starting-mech-card').forEach(card => card.classList.remove('selected'));
+            if (document.getElementById('points_remaining')) {
+                updatePointsRemaining();
+            }
+        }
+
+        function returnToIntro() {
+            hideCharacterModal();
+            hideLoadModal();
+            if (currentPlayer) {
+                showGameUI();
+            } else {
+                hideGameUI();
+                showIntroModal();
+            }
+        }
+
+        function startNewCharacter() {
+            currentPlayer = null;
+            hideGameUI();
+            hideIntroModal();
+            showCharacterModal();
+        }
+
+        function openLoadCharacter() {
+            currentPlayer = null;
+            hideGameUI();
+            hideIntroModal();
+            hideCharacterModal();
+            showLoadModal();
+        }
+
+        function quitGame() {
+            if (confirm('Exit BattleTech MMO? Unsaved progress will be lost.')) {
+                window.location.href = 'about:blank';
+            }
+        }
 
         // Text output functions
         function addToOutput(message) {
@@ -1186,12 +1834,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    currentPlayer = data.player;
-                    addToOutput(data.message);
-                    addDebugOutput('Player data loaded: ' + JSON.stringify(data.player));
-                    showPlayerInfo();
-                    updatePlayerMarker();
-                    addDebugOutput('Player info shown and marker updated');
+                    finalizeCharacterLoad(data.player, data.message);
                 } else {
                     addToOutput('Error: ' + data.message);
                 }
@@ -1201,8 +1844,24 @@
             });
         }
 
-        function loadCharacter() {
-            const name = document.getElementById('char_name').value.trim();
+        function loadCharacter(source = 'character_modal', selectedName = null) {
+            let name = '';
+            if (selectedName) {
+                name = selectedName.trim();
+                const loadInputField = document.getElementById('load_char_name');
+                if (loadInputField) {
+                    loadInputField.value = name;
+                }
+            }
+            if (!name && source === 'load_modal') {
+                const loadInput = document.getElementById('load_char_name');
+                name = loadInput ? loadInput.value.trim() : '';
+            }
+            
+            if (!name) {
+                const fallbackInput = document.getElementById('char_name');
+                name = fallbackInput ? fallbackInput.value.trim() : '';
+            }
             
             if (!name) {
                 addToOutput('Please enter a character name.');
@@ -1221,10 +1880,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    currentPlayer = data.player;
-                    addToOutput(data.message);
-                    showPlayerInfo();
-                    updatePlayerMarker();
+                    finalizeCharacterLoad(data.player, data.message);
                 } else {
                     addToOutput('Error: ' + data.message);
                 }
@@ -1234,86 +1890,43 @@
             });
         }
 
-        function recreateCharacterSection() {
-            // Check if character section already exists
-            if (document.getElementById('character_section')) {
-                return;
+        function finalizeCharacterLoad(playerData, message) {
+            currentPlayer = playerData;
+            normalizePlayerPosition();
+            addToOutput(message);
+            addDebugOutput('Player data loaded: ' + JSON.stringify(playerData));
+            hideCharacterModal();
+            hideLoadModal();
+            hideIntroModal();
+            showGameUI();
+            
+            if (!currentMapData) {
+                addDebugOutput('No map data present after character load; generating new map.');
+                generateNewMap();
+            } else {
+                drawMap(currentMapData, mapOffsetX, mapOffsetY);
             }
             
-            // Create the character section HTML
-            const characterSectionHTML = `
-                <div id="character_section" class="character-creation">
-                    <h3 class="battletech-heading">Character</h3>
-                    <div id="character_creation">
-                        <div class="skill-input">
-                            <label for="char_name" class="battletech-label">Name:</label>
-                            <input type="text" id="char_name" placeholder="Enter character name">
-                        </div>
-                        <div class="skill-allocation">
-                            <h4 class="battletech-label">Skill Allocation (10 points total):</h4>
-                            <div id="points_remaining" class="points-display">Points Remaining: 10</div>
-                            <div class="skill-input">
-                                <label for="gunnery" class="battletech-label">Gunnery:</label>
-                                <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', 1)">+</button>
-                                <input type="number" id="gunnery" min="0" max="8" value="8" readonly>
-                                <button type="button" class="skill-btn" onclick="adjustSkill('gunnery', -1)">-</button>
-                                <span>(0=best, 8=worst)</span>
-                            </div>
-                            <div class="skill-input">
-                                <label for="piloting" class="battletech-label">Piloting:</label>
-                                <button type="button" class="skill-btn" onclick="adjustSkill('piloting', 1)">+</button>
-                                <input type="number" id="piloting" min="0" max="8" value="8" readonly>
-                                <button type="button" class="skill-btn" onclick="adjustSkill('piloting', -1)">-</button>
-                                <span>(0=best, 8=worst)</span>
-                            </div>
-                            <div class="skill-input">
-                                <label for="guts" class="battletech-label">Guts:</label>
-                                <button type="button" class="skill-btn" onclick="adjustSkill('guts', 1)">+</button>
-                                <input type="number" id="guts" min="0" max="8" value="8" readonly>
-                                <button type="button" class="skill-btn" onclick="adjustSkill('guts', -1)">-</button>
-                                <span>(0=best, 8=worst)</span>
-                            </div>
-                            <div class="skill-input">
-                                <label for="tactics" class="battletech-label">Tactics:</label>
-                                <button type="button" class="skill-btn" onclick="adjustSkill('tactics', 1)">+</button>
-                                <input type="number" id="tactics" min="0" max="8" value="8" readonly>
-                                <button type="button" class="skill-btn" onclick="adjustSkill('tactics', -1)">-</button>
-                                <span>(0=best, 8=worst)</span>
-                            </div>
-                        </div>
-                        <div class="starting-mech-selection">
-                            <h4 class="battletech-label">Choose Your Starting Mech:</h4>
-                            <div id="starting_mechs_list" class="starting-mechs-grid">
-                                <!-- Starting mechs will be loaded here -->
-                            </div>
-                        </div>
-                        <div class="game-controls">
-                            <button onclick="createCharacter()">Create Character</button>
-                            <button onclick="loadCharacter()">Load Character</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Insert the character section at the beginning of the game panel
-            const gamePanel = document.querySelector('.game-panel');
-            gamePanel.insertAdjacentHTML('afterbegin', characterSectionHTML);
-            
-            // Initialize the skill allocation system
-            updatePointsRemaining();
-            
-            // Load starting mechs for the new character section
-            loadStartingMechs();
+            showPlayerInfo();
+            updatePlayerMarker();
+            addDebugOutput('Player info shown and marker updated');
+            resetCharacterCreationForm();
+            const loadInput = document.getElementById('load_char_name');
+            if (loadInput) {
+                loadInput.value = '';
+            }
         }
 
         function logoutCharacter() {
             currentPlayer = null;
-            recreateCharacterSection();
             document.getElementById('player_info').classList.add('hidden');
             document.getElementById('encounter_panel').classList.add('hidden');
             document.getElementById('shop_modal').classList.add('hidden');
             document.getElementById('player_marker').classList.add('hidden');
             addToOutput('Logged out. Create or load a character to continue.');
+            hideGameUI();
+            showIntroModal();
+            resetCharacterCreationForm();
         }
 
         // Helper function to calculate experience needed for levels
@@ -1337,13 +1950,28 @@
             };
         }
 
+        function showPlayerInfoTab(tabKey) {
+            const buttons = document.querySelectorAll('.player-info-tab-btn');
+            buttons.forEach(button => {
+                const isActive = button.dataset.tab === tabKey;
+                button.classList.toggle('active', isActive);
+                if (isActive) {
+                    button.setAttribute('aria-selected', 'true');
+                } else {
+                    button.removeAttribute('aria-selected');
+                }
+            });
+
+            const sections = document.querySelectorAll('.player-info-tab-content');
+            sections.forEach(section => {
+                const shouldShow = section.dataset.tab === tabKey;
+                section.classList.toggle('active', shouldShow);
+            });
+        }
+
         function showPlayerInfo() {
             addDebugOutput('showPlayerInfo called');
-            // Remove character section completely
-            const characterSection = document.getElementById('character_section');
-            if (characterSection) {
-                characterSection.remove();
-            }
+            normalizePlayerPosition();
             document.getElementById('player_info').classList.remove('hidden');
             
             // Calculate experience progress
@@ -1366,30 +1994,158 @@
             const activeMechDisplay = currentPlayer.active_mech ? 
                 `<div>Active Mech: ${currentPlayer.active_mech.display_name}</div>` : 
                 '<div style="color: #ff9800;">No active mech selected</div>';
+
+            const mechCount = Array.isArray(currentPlayer.mechs) ? currentPlayer.mechs.length : 0;
+            const vehicleCount = Array.isArray(currentPlayer.vehicles) ? currentPlayer.vehicles.length : 0;
             
+            const activeTabBtn = document.querySelector('.player-info-tab-btn.active');
+            const preferredTab = activeTabBtn ? activeTabBtn.dataset.tab : 'overview';
+
             const stats = document.getElementById('player_stats');
-            stats.innerHTML = `
-                <div><strong>${currentPlayer.name}</strong> (Level ${currentPlayer.level}) - Turn ${currentPlayer.turn_number}</div>
-                <div>Credits: ${currentPlayer.credits}</div>
-                <div class="experience-container">
-                    <div class="experience-text">
-                        <span class="level-info">Level ${currentPlayer.level} → ${currentPlayer.level + 1}</span>
-                        <span class="xp-numbers">${expProgress.current}/${expProgress.needed} XP</span>
-                    </div>
-                    <div class="experience-bar">
-                        <div class="experience-fill" style="width: ${expProgress.percentage}%"></div>
-                    </div>
+            const overviewHtml = `
+                <div class="player-info-section">
+                    <div><strong>${currentPlayer.name}</strong> (Level ${currentPlayer.level})</div>
+                    <div>Turn ${currentPlayer.turn_number} • Credits: ${currentPlayer.credits.toLocaleString()}</div>
+                    <div>Position: (${currentPlayer.exact_position.x.toFixed(1)}, ${currentPlayer.exact_position.y.toFixed(1)})</div>
                 </div>
-                ${movementDisplay}
-                ${activeMechDisplay}
-                <div>Gunnery: ${currentPlayer.gunnery} | Piloting: ${currentPlayer.piloting}</div>
-                <div>Guts: ${currentPlayer.guts} | Tactics: ${currentPlayer.tactics}</div>
-                <div>Position: (${currentPlayer.exact_position.x.toFixed(1)}, ${currentPlayer.exact_position.y.toFixed(1)})</div>
-                <div>Mechs: ${currentPlayer.mechs.length}</div>
-                <div class="game-controls" style="margin-top: 10px;">
-                    <button onclick="endTurn()" ${currentPlayer.movement_points_remaining <= 0 ? '' : 'disabled'}>End Turn</button>
+                <div class="player-info-section">
+                    <div class="experience-container">
+                        <div class="experience-text">
+                            <span class="level-info">Level ${currentPlayer.level} → ${currentPlayer.level + 1}</span>
+                            <span class="xp-numbers">${expProgress.current}/${expProgress.needed} XP</span>
+                        </div>
+                        <div class="experience-bar">
+                            <div class="experience-fill" style="width: ${expProgress.percentage}%"></div>
+                        </div>
+                    </div>
+                    ${movementDisplay}
+                    ${activeMechDisplay}
+                </div>
+                <div class="player-info-section">
+                    <div>Gunnery: ${currentPlayer.gunnery} | Piloting: ${currentPlayer.piloting}</div>
+                    <div>Guts: ${currentPlayer.guts} | Tactics: ${currentPlayer.tactics}</div>
+                    <div>Operational Mechs: ${mechCount} | Vehicles: ${vehicleCount}</div>
+                </div>
+                <div class="player-info-section">
+                    <div class="game-controls" style="margin-top: 0;">
+                        <button onclick="endTurn()" ${currentPlayer.movement_points_remaining <= 0 ? '' : 'disabled'}>End Turn</button>
+                    </div>
                 </div>
             `;
+            stats.innerHTML = overviewHtml;
+
+            const equipmentContainer = document.getElementById('player_equipment');
+            if (equipmentContainer) {
+                let equipmentHtml = '';
+                if (currentPlayer.active_mech && currentPlayer.active_mech.template && currentPlayer.active_mech.template.specs) {
+                    const specs = currentPlayer.active_mech.template.specs;
+                    const weapons = Array.isArray(specs.weapons) ? specs.weapons : [];
+                    const heatSinks = specs.heat_sinks;
+                    const ammo = specs.ammo || specs.ammunition;
+
+                    if (weapons.length > 0) {
+                        equipmentHtml += `
+                            <div class="player-info-section">
+                                <div class="player-info-subheading">Weapon Systems</div>
+                                <ul class="player-info-list">
+                                    ${weapons.map(weapon => `<li>${weapon.quantity || 1}× ${weapon.type} <span style="color: var(--text-secondary)">(${weapon.location})</span></li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+
+                    if (heatSinks !== undefined) {
+                        equipmentHtml += `
+                            <div class="player-info-section">
+                                <div class="player-info-subheading">Heat Management</div>
+                                <div>${heatSinks} Heat Sinks installed.</div>
+                            </div>
+                        `;
+                    }
+
+                    if (ammo && Array.isArray(ammo) && ammo.length > 0) {
+                        equipmentHtml += `
+                            <div class="player-info-section">
+                                <div class="player-info-subheading">Ammunition Stores</div>
+                                <ul class="player-info-list">
+                                    ${ammo.map(item => `<li>${item.quantity || 1}× ${item.type}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    } else {
+                        equipmentHtml += `
+                            <div class="player-info-section player-info-empty">
+                                No ammunition tracked for current configuration.
+                            </div>
+                        `;
+                    }
+                } else {
+                    equipmentHtml = `
+                        <div class="player-info-section player-info-empty">
+                            No active mech selected. Select or purchase a mech to view equipped systems.
+                        </div>
+                    `;
+                }
+                equipmentContainer.innerHTML = equipmentHtml;
+            }
+
+            const mechContainer = document.getElementById('player_mech_details');
+            if (mechContainer) {
+                let mechHtml = '';
+                if (currentPlayer.active_mech && currentPlayer.active_mech.template && currentPlayer.active_mech.template.specs) {
+                    const activeMech = currentPlayer.active_mech;
+                    const specs = activeMech.template.specs || {};
+                    const movement = specs.movement_points || {};
+                    const armor = specs.armor || {};
+                    const armorEntries = Object.entries(armor);
+
+                    const generalDetails = `
+                        <div class="player-info-section">
+                            <div class="player-info-subheading">Chassis Overview</div>
+                            <div>Name: ${activeMech.display_name}</div>
+                            <div>Designation: ${activeMech.template.name} ${activeMech.template.model}</div>
+                            <div>Tonnage: ${activeMech.template.tonnage} tons • Battle Value: ${activeMech.template.battle_value}</div>
+                            <div>Condition: ${(activeMech.armor_condition * 100).toFixed(0)}% Armor / ${(activeMech.internal_condition * 100).toFixed(0)}% Internal</div>
+                        </div>
+                    `;
+
+                    const movementDetails = `
+                        <div class="player-info-section">
+                            <div class="player-info-subheading">Mobility Profile</div>
+                            <div>Walk: ${movement.walking || 0} • Run: ${movement.running || 0} • Jump: ${movement.jumping || 0}</div>
+                        </div>
+                    `;
+
+                    let armorGrid = '';
+                    if (armorEntries.length > 0) {
+                        armorGrid = `
+                            <div class="player-info-section">
+                                <div class="player-info-subheading">Armor Distribution</div>
+                                <div class="armor-grid">
+                                    ${armorEntries.map(([location, value]) => `<div class="armor-cell"><strong>${location.replace(/_/g, ' ')}</strong><br>${value} pts</div>`).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    mechHtml = generalDetails + movementDetails + armorGrid;
+                } else if (currentPlayer.vehicles && currentPlayer.vehicles.length > 0) {
+                    mechHtml = `
+                        <div class="player-info-section player-info-empty">
+                            No active mech selected. Activate a vehicle to display detailed specs.
+                        </div>
+                    `;
+                } else {
+                    mechHtml = `
+                        <div class="player-info-section player-info-empty">
+                            No chassis assigned. Purchase a mech from the MechWarrior Hub to view chassis details.
+                        </div>
+                    `;
+                }
+                mechContainer.innerHTML = mechHtml;
+            }
+
+            showPlayerInfoTab(preferredTab);
             addDebugOutput('Player info panel updated');
         }
 
@@ -1399,6 +2155,7 @@
                 addDebugOutput('Missing player or map data - player: ' + !!currentPlayer + ', map: ' + !!currentMapData);
                 return;
             }
+            normalizePlayerPosition();
             
             const marker = document.getElementById('player_marker');
             const canvas = document.getElementById('map_canvas');
@@ -1407,24 +2164,19 @@
             const horizontalSpacing = HEX_SIZE * Math.sqrt(3);
             const verticalSpacing = HEX_SIZE * 1.5;
             
-            const exactPos = currentPlayer.exact_position;
-            const row = exactPos.y;
-            const col = exactPos.x;
+            const centered = getCenteredHexPosition(currentPlayer.exact_position);
+            const row = centered.y;
+            const col = centered.x;
             
             // Calculate hex offset for odd rows
-            const xOffset = (Math.floor(row) % 2) * (horizontalSpacing / 2);
+            const xOffset = (row % 2) * (horizontalSpacing / 2);
             
-            // Calculate fractional position within hex
-            const fracX = col - Math.floor(col);
-            const fracY = row - Math.floor(row);
+            // Base position for the hex center
+            const baseX = col * horizontalSpacing + xOffset + HEX_SIZE;
+            const baseY = row * verticalSpacing + HEX_SIZE;
             
-            // Base position for the hex
-            const baseX = Math.floor(col) * horizontalSpacing + xOffset + HEX_SIZE;
-            const baseY = Math.floor(row) * verticalSpacing + HEX_SIZE;
-            
-            // Add fractional movement (half-hex movement)
-            const x = baseX + (fracX * horizontalSpacing) + mapOffsetX;
-            const y = baseY + (fracY * verticalSpacing) + mapOffsetY;
+            const x = baseX + mapOffsetX;
+            const y = baseY + mapOffsetY;
             
             marker.style.left = (x - 4) + 'px';
             marker.style.top = (y - 4) + 'px';
@@ -1437,14 +2189,12 @@
             updatePointsRemaining();
         }
         
-        // Starting mech selection
-        let selectedStartingMech = null;
-        
         function loadStartingMechs() {
             fetch('/get_starting_mechs')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    selectedStartingMech = null;
                     const list = document.getElementById('starting_mechs_list');
                     list.innerHTML = '';
                     
@@ -1573,6 +2323,34 @@
             return { row, col };
         }
 
+        function getCenteredHexPosition(position) {
+            if (!position) {
+                return { x: 0, y: 0 };
+            }
+            return {
+                x: Math.round(position.x ?? 0),
+                y: Math.round(position.y ?? 0)
+            };
+        }
+
+        function normalizePlayerPosition() {
+            if (!currentPlayer) {
+                return;
+            }
+            if (!currentPlayer.exact_position) {
+                currentPlayer.exact_position = currentPlayer.position ? { ...currentPlayer.position } : { x: 0, y: 0 };
+            }
+            const centered = getCenteredHexPosition(currentPlayer.exact_position);
+            currentPlayer.exact_position.x = centered.x;
+            currentPlayer.exact_position.y = centered.y;
+            if (!currentPlayer.position) {
+                currentPlayer.position = { ...centered };
+            } else {
+                currentPlayer.position.x = centered.x;
+                currentPlayer.position.y = centered.y;
+            }
+        }
+
         function movePlayer(x, y) {
             if (!currentPlayer || !currentMapData) return;
             
@@ -1593,6 +2371,7 @@
             .then(data => {
                 if (data.success) {
                     currentPlayer = data.player;
+                    normalizePlayerPosition();
                     addToOutput(data.message);
                     showPlayerInfo();
                     updatePlayerMarker();
@@ -1623,6 +2402,7 @@
             .then(data => {
                 if (data.success) {
                     currentPlayer = data.player;
+                    normalizePlayerPosition();
                     addToOutput(data.message);
                     showPlayerInfo();
                 } else {
@@ -1684,6 +2464,7 @@
             .then(data => {
                 if (data.success) {
                     currentPlayer = data.player;
+                    normalizePlayerPosition();
                     addToOutput(data.message);
                     showPlayerInfo();
                 } else {
@@ -1698,7 +2479,7 @@
         function calculateMovementCost(targetX, targetY) {
             if (!currentPlayer || !currentMapData) return 0;
             
-            const currentPos = currentPlayer.exact_position;
+            const currentPos = getCenteredHexPosition(currentPlayer.exact_position);
             const cell = currentMapData[targetY][targetX];
             
             // Calculate distance in half-hexes
@@ -1756,6 +2537,7 @@
             .then(data => {
                 if (data.success) {
                     currentPlayer = data.player;
+                    normalizePlayerPosition();
                     addToOutput(data.result.message);
                     showPlayerInfo();
                     
@@ -1999,6 +2781,7 @@
             .then(data => {
                 if (data.success) {
                     currentPlayer = data.player;
+                    normalizePlayerPosition();
                     addToOutput(data.message);
                     showPlayerInfo();
                     hideShopModal();
@@ -2093,6 +2876,7 @@
                 .then(data => {
                     if (data.success) {
                         currentPlayer = data.player;
+                    normalizePlayerPosition();
                         addToOutput(data.message);
                         showPlayerInfo();
                         hideShopModal();
@@ -2125,6 +2909,7 @@
                 .then(data => {
                     if (data.success) {
                         currentPlayer = data.player;
+                    normalizePlayerPosition();
                         addToOutput(data.message);
                         showPlayerInfo();
                         loadMissions(); // Reload missions to hide the declined one
@@ -2250,10 +3035,18 @@
                 const status = getUnitStatus(mech.armor_condition, mech.internal_condition, true);
                 const template = mech.template;
                 const isActive = currentPlayer && currentPlayer.active_mech && currentPlayer.active_mech.id === mech.id;
+                const escaped_mech_name = mech.display_name.replace(/'/g, "\\'");
                 
                 div.innerHTML = `
                     <div class="unit-header">
-                        <h4 class="unit-name">${mech.display_name}</h4>
+                        <h4 class="unit-name">
+                            ${mech.display_name}
+                            <button type="button" class="rename-icon" aria-label="Rename mech" onclick="renameUnit('mech', ${mech.id}, '${escaped_mech_name}')">
+                                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm14.71-9.46a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.8 1.8 3.75 3.75 1.81-1.79z"></path>
+                                </svg>
+                            </button>
+                        </h4>
                         <div class="unit-status ${status.class}">${status.text}</div>
                         ${isActive ? '<div class="unit-status active">Active</div>' : ''}
                     </div>
@@ -2278,9 +3071,6 @@
                     <div class="unit-actions">
                         <button class="unit-btn repair" onclick="repairUnit('mech', ${mech.id})" ${mech.repair_cost === 0 ? 'disabled' : ''}>
                             Repair (${mech.repair_cost.toLocaleString()})
-                        </button>
-                        <button class="unit-btn rename" onclick="renameUnit('mech', ${mech.id}, '${mech.display_name}')">
-                            Rename
                         </button>
                         <button class="unit-btn active" onclick="setActiveMech(${mech.id})" ${mech.operational ? '' : 'disabled'}>
                             ${isActive ? 'Currently Active' : 'Set Active'}
@@ -2383,6 +3173,7 @@
                 .then(data => {
                     if (data.success) {
                         currentPlayer = data.player;
+                    normalizePlayerPosition();
                         addToOutput(data.message);
                         showPlayerInfo();
                         loadHangarData(); // Refresh hangar data
@@ -2481,6 +3272,7 @@
                     .then(data => {
                         if (data.success) {
                             currentPlayer = data.player;
+                            normalizePlayerPosition();
                             showPlayerInfo();
                         }
                     });
@@ -2498,6 +3290,9 @@
                 isDragging = true;
                 startDragX = e.clientX - mapOffsetX;
                 startDragY = e.clientY - mapOffsetY;
+                dragStartCursorX = e.clientX;
+                dragStartCursorY = e.clientY;
+                dragMoved = false;
                 document.getElementById('map_canvas').style.cursor = 'grabbing';
             }
         }
@@ -2514,9 +3309,74 @@
             
             mapOffsetX = e.clientX - startDragX;
             mapOffsetY = e.clientY - startDragY;
+
+            if (!dragMoved) {
+                const deltaX = Math.abs(e.clientX - dragStartCursorX);
+                const deltaY = Math.abs(e.clientY - dragStartCursorY);
+                if (deltaX > 4 || deltaY > 4) {
+                    dragMoved = true;
+                }
+            }
             
             drawMap(currentMapData, mapOffsetX, mapOffsetY);
             hideTooltip();
+        }
+
+        function panMap(direction) {
+            if (!currentMapData) {
+                addDebugOutput('Pan requested but no map data is loaded.');
+                return;
+            }
+
+            const step = HEX_SIZE * 3;
+
+            switch (direction) {
+                case 'up':
+                    mapOffsetY += step;
+                    break;
+                case 'down':
+                    mapOffsetY -= step;
+                    break;
+                case 'left':
+                    mapOffsetX += step;
+                    break;
+                case 'right':
+                    mapOffsetX -= step;
+                    break;
+            }
+
+            lastMapOffsetX = mapOffsetX;
+            lastMapOffsetY = mapOffsetY;
+            drawMap(currentMapData, mapOffsetX, mapOffsetY);
+        }
+
+        function centerMapOnPlayer() {
+            if (!currentPlayer || !currentMapData) {
+                addToOutput('No active MechWarrior to center on.');
+                return;
+            }
+            normalizePlayerPosition();
+
+            const canvas = document.getElementById('map_canvas');
+            const horizontalSpacing = HEX_SIZE * Math.sqrt(3);
+            const verticalSpacing = HEX_SIZE * 1.5;
+
+            const centered = getCenteredHexPosition(currentPlayer.exact_position);
+            const baseRow = centered.y;
+            const baseCol = centered.x;
+
+            const xOffset = (baseRow % 2) * (horizontalSpacing / 2);
+
+            const playerMapX = baseCol * horizontalSpacing + xOffset + HEX_SIZE;
+            const playerMapY = baseRow * verticalSpacing + HEX_SIZE;
+
+            mapOffsetX = (canvas.width / 2) - playerMapX;
+            mapOffsetY = (canvas.height / 2) - playerMapY;
+
+            lastMapOffsetX = mapOffsetX;
+            lastMapOffsetY = mapOffsetY;
+
+            drawMap(currentMapData, mapOffsetX, mapOffsetY);
         }
 
         function showTooltip(event) {
@@ -2575,10 +3435,15 @@
         }
 
         function handleMapClick(event) {
-            if (!currentPlayer || isDragging) return;
+            if (!currentPlayer) return;
+            if (isDragging || dragMoved) {
+                dragMoved = false;
+                return;
+            }
             
             const { row, col } = getHexagonCoordinates(event.clientX, event.clientY);
             movePlayer(col, row);
+            dragMoved = false;
         }
 
         function generateNewMap() {
@@ -2623,28 +3488,26 @@
             
             // Reset player data
             currentPlayer = null;
-            // Hide other panels
-            document.getElementById('player_info').style.display = 'none';
+            document.getElementById('player_info').classList.add('hidden');
             document.getElementById('encounter_panel').classList.add('hidden');
             document.getElementById('shop_modal').classList.add('hidden');
             document.getElementById('player_marker').classList.add('hidden');
-            
-            // Recreate character creation section
-            recreateCharacterSection();
-            
-            // Reset character form
-            document.getElementById('char_name').value = '';
-            document.getElementById('gunnery').value = '8';
-            document.getElementById('piloting').value = '8';
-            document.getElementById('guts').value = '8';
-            document.getElementById('tactics').value = '8';
-            updatePointsRemaining();
+            hideGameUI();
+            hideLoadModal();
+            showCharacterModal();
         }
 
         function showLoadCharacter() {
             toggleDropdown();
-            addToOutput('Load character functionality not yet implemented.');
-            // TODO: Implement load character functionality
+            addToOutput('Opening character load terminal...');
+            currentPlayer = null;
+            document.getElementById('player_info').classList.add('hidden');
+            document.getElementById('encounter_panel').classList.add('hidden');
+            document.getElementById('shop_modal').classList.add('hidden');
+            document.getElementById('player_marker').classList.add('hidden');
+            hideGameUI();
+            hideCharacterModal();
+            showLoadModal();
         }
 
         function openMechShop() {
@@ -2686,7 +3549,7 @@
 
         function showAbout() {
             toggleDropdown();
-            addToOutput('=== BattleTech MUD ===');
+            addToOutput('=== BattleTech MMO ===');
             addToOutput('A text-based MUD game set in the BattleTech universe.');
             addToOutput('Navigate the battlefield, pilot mighty BattleMechs, and forge your destiny.');
             addToOutput('Version: 1.0.0');
@@ -2699,14 +3562,15 @@
                 // Reset player data
                 currentPlayer = null;
                 // Hide player info
-                document.getElementById('player_info').style.display = 'none';
+                document.getElementById('player_info').classList.add('hidden');
                 // Hide other panels
                 document.getElementById('encounter_panel').classList.add('hidden');
                 document.getElementById('shop_modal').classList.add('hidden');
                 document.getElementById('player_marker').classList.add('hidden');
-                // Recreate character creation section
-                recreateCharacterSection();
-                addToOutput('Logged out successfully.');
+                hideGameUI();
+                showIntroModal();
+                resetCharacterCreationForm();
+                addToOutput('Logged out successfully. Return to the briefing room to begin anew.');
             }
         }
 
@@ -2743,6 +3607,54 @@
             
             generateNewMap();
         };
+
+        function fetchSavedCharacters() {
+            fetch('/list_characters')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderSavedCharacters(data.characters);
+                    } else {
+                        renderSavedCharacters([]);
+                        addToOutput('Error loading characters: ' + (data.message || 'Unknown error.'));
+                    }
+                })
+                .catch(error => {
+                    renderSavedCharacters([]);
+                    addToOutput('Error loading characters: ' + error);
+                });
+        }
+
+        function renderSavedCharacters(characters) {
+            const listContainer = document.getElementById('saved_characters_list');
+            if (!listContainer) {
+                return;
+            }
+
+            listContainer.innerHTML = '';
+
+            if (!characters || characters.length === 0) {
+                listContainer.innerHTML = '<div class="no-saved-characters">No MechWarriors found in the database.</div>';
+                return;
+            }
+
+            characters.forEach(character => {
+                if (!character || !character.name) {
+                    return;
+                }
+                const button = document.createElement('button');
+                button.className = 'saved-character-btn';
+                button.textContent = character.name;
+                button.addEventListener('click', () => {
+                    const input = document.getElementById('load_char_name');
+                    if (input) {
+                        input.value = character.name;
+                    }
+                    loadCharacter('list', character.name);
+                });
+                listContainer.appendChild(button);
+            });
+        }
     </script>
 </body>
 </html> 

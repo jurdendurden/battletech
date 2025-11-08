@@ -4,7 +4,6 @@ from map_generator import MapGenerator
 from models import db, Player, MechTemplate, PlayerMech, VehicleTemplate, PlayerVehicle
 from game_logic import BattleTechGame
 import json
-import os
 import random
 from datetime import datetime
 
@@ -549,6 +548,25 @@ def decline_mission():
             'success': False,
             'message': result['message']
         })
+
+
+@app.route('/list_characters')
+def list_characters():
+    """Return list of characters stored in the database."""
+    players = Player.query.order_by(Player.name.asc()).all()
+    characters = []
+    for player in players:
+        characters.append({
+            'name': player.name,
+            'level': player.level,
+            'last_active': player.last_active.isoformat() if player.last_active else None,
+            'credits': player.credits
+        })
+    return jsonify({
+        'success': True,
+        'characters': characters
+    })
+
 
 @app.route('/get_hangar')
 def get_hangar():

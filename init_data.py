@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Initialize the BattleTech MUD database with basic data.
+Initialize the BattleTech MMO database with basic data.
 """
 
 from app import app
@@ -99,7 +99,7 @@ def init_vehicles():
 def main():
     """Main initialization function."""
     with app.app_context():
-        print("Initializing BattleTech MUD database...")
+        print("Initializing BattleTech MMO database...")
         
         # Create all tables
         db.create_all()

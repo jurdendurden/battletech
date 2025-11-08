@@ -7,25 +7,27 @@
 }
 
 :root {
-    /* Dark theme color palette */
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
-    --text-primary: #ffffff;
-    --text-secondary: #b3b3b3;
-    --accent-primary: #4a9eff;
-    --accent-secondary: #2d6bdb;
-    --border-color: #404040;
-    --hover-color: #3d3d3d;
-    --success-color: #4caf50;
-    --error-color: #f44336;
-    --warning-color: #ff9800;
+    /* Dark slate theme color palette */
+    --bg-primary: #15171c;
+    --bg-secondary: #1f2229;
+    --text-primary: #f5f7fa;
+    --text-secondary: #9aa2b1;
+    --accent-primary: #708090;
+    --accent-secondary: #556070;
+    --border-color: #323641;
+    --hover-color: #2a2e36;
+    --success-color: #3ddc84;
+    --error-color: #ff5555;
+    --warning-color: #ffae42;
+    --neon-start: #39ff14;
+    --neon-end: #adff2f;
 }
 
 /* Base styles */
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Consolas', 'Courier New', monospace;
     margin: 0;
     padding: 0;
     line-height: 1.6;
@@ -48,7 +50,7 @@ header {
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary);
     margin-bottom: 1rem;
-    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
     font-weight: normal;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -71,21 +73,27 @@ h3 {
 
 /* Button styles */
 button {
-    background-color: var(--accent-primary);
     color: var(--text-primary);
-    border: none;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
     font-weight: normal;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    border: 2px solid transparent;
+    background-image:
+        linear-gradient(var(--bg-secondary), var(--bg-secondary)),
+        linear-gradient(135deg, var(--neon-start), var(--neon-end));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 0 12px rgba(57, 255, 20, 0.2);
 }
 
 button:hover {
-    background-color: var(--accent-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 0 18px rgba(57, 255, 20, 0.35);
 }
 
 button:disabled {
@@ -183,28 +191,29 @@ input:focus, select:focus, textarea:focus {
 
 /* BattleTech specific styles */
 .battletech-title {
-    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
     font-size: 3rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-    color: var(--accent-primary);
+    text-shadow: 0 0 12px rgba(57, 255, 20, 0.35);
+    color: var(--neon-start);
     margin-bottom: 1rem;
     text-align: center;
 }
 
 .battletech-heading {
-    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--accent-primary);
-    border-bottom: 2px solid var(--accent-primary);
+    color: var(--neon-start);
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(135deg, var(--neon-start), var(--neon-end)) 1;
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
 }
 
 .battletech-label {
-    font-family: 'BTLogo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'BTLogo', 'Consolas', 'Courier New', monospace;
     font-weight: normal;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -228,9 +237,10 @@ input:focus, select:focus, textarea:focus {
 
 .experience-fill {
     height: 100%;
-    background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 50%, #CDDC39 100%);
+    background: linear-gradient(90deg, var(--neon-start) 0%, var(--neon-end) 100%);
     transition: width 0.3s ease;
     border-radius: 3px;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.35);
 }
 
 .experience-text {
@@ -269,9 +279,10 @@ input:focus, select:focus, textarea:focus {
 
 .movement-fill {
     height: 100%;
-    background: linear-gradient(90deg, #2196F3 0%, #03A9F4 50%, #00BCD4 100%);
+    background: linear-gradient(90deg, rgba(57, 255, 20, 0.8) 0%, rgba(173, 255, 47, 0.9) 100%);
     transition: width 0.3s ease;
     border-radius: 3px;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
 }
 
 .movement-text {

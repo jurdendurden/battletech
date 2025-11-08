@@ -4,7 +4,7 @@ from datetime import datetime
 from models import db, Player, MechTemplate, PlayerMech, VehicleTemplate, PlayerVehicle
 
 class GameEngine:
-    """Main game engine for BattleTech MUD."""
+    """Main game engine for BattleTech MMO."""
     
     def __init__(self):
         self.encounters = self._load_encounters()

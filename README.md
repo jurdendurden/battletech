@@ -1,4 +1,4 @@
-# BattleTech MUD
+# BattleTech MMO
 
 A web-based graphical MUD (Multi-User Dungeon) based on the BattleTech universe. Players create MechWarrior characters, explore procedurally generated hex maps, engage in encounters, and purchase BattleMechs and vehicles.
 
@@ -12,6 +12,13 @@ A web-based graphical MUD (Multi-User Dungeon) based on the BattleTech universe.
 - **Mech Shop**: Purchase iconic BattleMechs from Technical Readout 3025
 - **Credit Economy**: Earn credits through successful encounters and missions
 - **Real-time Interface**: Interactive map with text output window
+- **Monospaced UI Styling**: Core interface text now uses a monospaced typeface while preserving the BattleTech logo branding
+- **Briefing Room Intro**: Cinematic introduction modal keeps the main interface hidden until you create or load a MechWarrior
+- **Map Navigation Arrows**: Directional controls complement drag-to-pan for precise battlefield positioning
+- **Slate & Neon Theme**: Interface refreshed with slate tones and neon green accents for a modern BattleTech aesthetic
+- **Player Status Tabs**: Multi-panel MechWarrior HUD for stats, equipment/ammo, and active chassis details
+- **Command Deck Layout**: Global top bar keeps branding front-and-center with quick access to the battlefield menu
+- **Hangar Rename Icon**: Rename BattleMechs directly from the Hangar tab using an inline pencil icon next to each chassis name
 
 ## Installation
 
